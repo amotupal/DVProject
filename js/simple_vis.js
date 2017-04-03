@@ -175,16 +175,6 @@ var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_D
 var local_path = "../Sample_Data/accident_new.csv"
 
 d3.csv(path, (error, csv) => {
-
-    // if (error) {
-    //     console.log("error ::", error)
-    // }
-    // else{
-    //     console.log("ccsv: ",csv)
-    // }
-    // console.log("I am here!!!!!!!!!!!!!!!!!!!!")
-    // console.log("ccsv: ",csv);
-
     d3.csv("../Sample_Data/state_population.csv", (error, pops) => {
         if(error){
             console.log(error);
@@ -193,7 +183,6 @@ d3.csv(path, (error, csv) => {
             pops.forEach((item, index) => {
                 population_map[item.State] = item.Population;
             });
-            console.log(population_map)
         }
     });
 
@@ -206,7 +195,6 @@ d3.csv(path, (error, csv) => {
     stateRaisedCount = stateGroup.reduceCount();
     stateCounts = stateRaisedCount.all()
     
-    console.log(states)
     // console.log(d3.min(stateCounts))
     stateRaisedFatalities = stateGroup.reduceSum(function(d){
         return d.FATALS;
@@ -216,7 +204,6 @@ d3.csv(path, (error, csv) => {
     var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
 
     var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
-    console.log(orderedStateGroup[50].value);
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
     d3.json("../data/us_states.json", function (statesJson) {

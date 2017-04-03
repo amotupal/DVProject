@@ -157,6 +157,7 @@ var demo;
 var states;
 var stateRaisedCount;
 var accident_facts;
+var population_map = {};
 
 // d3.csv("../Sample_Data/accident_new.csv", (error, accidents_csv) => {
 //     if(error) {
@@ -183,13 +184,39 @@ d3.csv(path, (error, csv) => {
     // }
     // console.log("I am here!!!!!!!!!!!!!!!!!!!!")
     // console.log("ccsv: ",csv);
+
+    d3.csv("../Sample_Data/state_population.csv", (error, pops) => {
+        if(error){
+            console.log(error);
+        }
+        else{
+            pops.forEach((item, index) => {
+                population_map[item.State] = item.Population;
+            });
+            console.log(population_map)
+        }
+    });
+
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
         return d.STATE;
     });
-    stateRaisedCount = states.group().reduceCount();
-    print_filter('stateRaisedCount')
+    stateGroup = states.group();
+    stateRaisedCount = stateGroup.reduceCount();
+    stateCounts = stateRaisedCount.all()
+    
+    console.log(states)
+    // console.log(d3.min(stateCounts))
+    stateRaisedFatalities = stateGroup.reduceSum(function(d){
+        return d.FATALS;
+    });
+    
+    orderedStateGroup = stateGroup.top(51)
+    var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
+
+    var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
+    console.log(orderedStateGroup[50].value);
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
     d3.json("../data/us_states.json", function (statesJson) {
@@ -198,14 +225,14 @@ d3.csv(path, (error, csv) => {
                 .dimension(states)
                 .group(stateRaisedCount)
                 .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
-                .colorDomain([0,200])
+                .colorDomain([bottom_state,top_state])
                 .colorAccessor(function (d) { return d})
                 .overlayGeoJson(statesJson.features, "state", function (d) {
                     return d.properties.name;
                 })
                 .valueAccessor(function(kv) {
                     //console.log("kv: ",kv);
-                    return kv.value;
+                    return kv.value / population_map[kv.key];
                 })
                 .title(function (d) {
                     return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";

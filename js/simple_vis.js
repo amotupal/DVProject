@@ -175,7 +175,9 @@ var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_D
 var local_path = "../Sample_Data/accident_new.csv"
 
 d3.csv(path, (error, csv) => {
-    d3.csv("../Sample_Data/state_population.csv", (error, pops) => {
+    var github_path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/state%20population.csv"
+    var local_path = "../Sample_Data/state_population.csv"
+    d3.csv(github_path, (error, pops) => {
         if(error){
             console.log(error);
         }

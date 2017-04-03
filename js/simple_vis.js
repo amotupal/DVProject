@@ -52,7 +52,7 @@ Year Ring
 *************/
 var yearRingChart   = dc.pieChart("#dc-yr-pie-graph","chart");
 var yearDim  = ndx.dimension(function(d) {return +d.Year;});
-print_filter("yearDim");
+// print_filter("yearDim");
 var year_total = yearDim.group().reduceSum(function(d) {return d.hits;});
 yearRingChart
     .width(180).height(180)
@@ -148,7 +148,7 @@ $('#dc-yr-pie-graph').on('click', function(){
 
     var minDate2 = dateDim.bottom(1)[0].date;
     var maxDate2 = dateDim.top(1)[0].date;
-    console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
+    // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
     hitslineChart.x(d3.time.scale().domain([minDate2,maxDate2]));
     hitslineChart.redraw();
 });
@@ -156,49 +156,61 @@ $('#dc-yr-pie-graph').on('click', function(){
 var demo;
 var states;
 var stateRaisedSum;
+var accident_facts;
+
+// d3.csv("../Sample_Data/accident_new.csv", (error, accidents_csv) => {
+//     if(error) {
+//         console.log("error::", error);
+//     }
+//     else{
+//         accident_facts = crossfilter(accidents_csv);
+//         print_filter("accident_facts");
+
+//     }
+// })
 
 
-d3.csv("../data/data.csv", (error, csv) => {
 
-    if (error) {
-        console.log("error ::", error)
-    }
-    else{
-        console.log("ccsv: ",csv)
-    }
-    console.log("I am here!!!!!!!!!!!!!!!!!!!!")
+d3.csv("../Sample_Data/accident_new.csv", (error, csv) => {
+
+    // if (error) {
+    //     console.log("error ::", error)
+    // }
+    // else{
+    //     console.log("ccsv: ",csv)
+    // }
+    // console.log("I am here!!!!!!!!!!!!!!!!!!!!")
     // console.log("ccsv: ",csv);
-    demo = crossfilter(csv);
+    accident_facts = crossfilter(csv);
 
-    states = demo.dimension(function (d) {
+    states = accident_facts.dimension(function (d) {
         return d["State"];
     });
-    stateRaisedSum = states.group().reduceSum(function (d) {
-        return d["Raised"];
-    });
+    stateRaisedCount = states.group().reduceCount();
+    print_filter('stateRaisedCount')
 
-    print_filter("stateRaisedSum");
-    var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
-    d3.json("../data/us_states.json", function (statesJson) {
-        usChart.width(960)
-                .height(500)
-                .dimension(states)
-                .group(stateRaisedSum)
-                .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
-                .colorDomain([0,200])
-                .colorAccessor(function (d) { return d})
-                .overlayGeoJson(statesJson.features, "state", function (d) {
-                    return d.properties.name;
-                })
-                .valueAccessor(function(kv) {
-                    //console.log("kv: ",kv);
-                    return kv.value;
-                })
-                .title(function (d) {
-                    return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-                });
-        dc.renderAll("map");
-    });
+    // print_filter("stateRaisedSum");
+    // var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
+    // d3.json("../data/us_states.json", function (statesJson) {
+    //     usChart.width(960)
+    //             .height(500)
+    //             .dimension(states)
+    //             .group(stateRaisedSum)
+    //             .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
+    //             .colorDomain([0,200])
+    //             .colorAccessor(function (d) { return d})
+    //             .overlayGeoJson(statesJson.features, "state", function (d) {
+    //                 return d.properties.name;
+    //             })
+    //             .valueAccessor(function(kv) {
+    //                 //console.log("kv: ",kv);
+    //                 return kv.value;
+    //             })
+    //             .title(function (d) {
+    //                 return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+    //             });
+    //     dc.renderAll("map");
+    // });
 });
 
 function print_filter(filter){

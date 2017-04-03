@@ -169,9 +169,11 @@ var accident_facts;
 //     }
 // })
 
+var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
 
+var local_path = "../Sample_Data/accident_new.csv"
 
-d3.csv("../Sample_Data/accident_new.csv", (error, csv) => {
+d3.csv(path, (error, csv) => {
 
     // if (error) {
     //     console.log("error ::", error)
@@ -184,7 +186,7 @@ d3.csv("../Sample_Data/accident_new.csv", (error, csv) => {
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
-        return d["State"];
+        return d.State;
     });
     stateRaisedCount = states.group().reduceCount();
     print_filter('stateRaisedCount')

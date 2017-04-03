@@ -367,6 +367,7 @@ d3.csv(github_path, (error, pops) => {
         pops.forEach((item, index) => {
             population_map[item.State] = item.Population;
         });
+        console.log(population_map);
     }
 });
 

@@ -155,7 +155,7 @@ $('#dc-yr-pie-graph').on('click', function(){
 
 var demo;
 var states;
-var stateRaisedSum;
+var stateRaisedCount;
 var accident_facts;
 
 // d3.csv("../Sample_Data/accident_new.csv", (error, accidents_csv) => {
@@ -186,33 +186,32 @@ d3.csv(path, (error, csv) => {
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
-        return d.State;
+        return d.STATE;
     });
     stateRaisedCount = states.group().reduceCount();
     print_filter('stateRaisedCount')
 
-    // print_filter("stateRaisedSum");
-    // var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
-    // d3.json("../data/us_states.json", function (statesJson) {
-    //     usChart.width(960)
-    //             .height(500)
-    //             .dimension(states)
-    //             .group(stateRaisedSum)
-    //             .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
-    //             .colorDomain([0,200])
-    //             .colorAccessor(function (d) { return d})
-    //             .overlayGeoJson(statesJson.features, "state", function (d) {
-    //                 return d.properties.name;
-    //             })
-    //             .valueAccessor(function(kv) {
-    //                 //console.log("kv: ",kv);
-    //                 return kv.value;
-    //             })
-    //             .title(function (d) {
-    //                 return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-    //             });
-    //     dc.renderAll("map");
-    // });
+    var usChart = dc.geoChoroplethChart("#dc-map-chart","map");
+    d3.json("../data/us_states.json", function (statesJson) {
+        usChart.width(960)
+                .height(500)
+                .dimension(states)
+                .group(stateRaisedCount)
+                .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
+                .colorDomain([0,200])
+                .colorAccessor(function (d) { return d})
+                .overlayGeoJson(statesJson.features, "state", function (d) {
+                    return d.properties.name;
+                })
+                .valueAccessor(function(kv) {
+                    //console.log("kv: ",kv);
+                    return kv.value;
+                })
+                .title(function (d) {
+                    return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+                });
+        dc.renderAll("map");
+    });
 });
 
 function print_filter(filter){

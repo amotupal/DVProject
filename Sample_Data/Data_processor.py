@@ -47,4 +47,11 @@ data['ARR_TimeStamp'] =  (data['ARR_TimeStamp'] - data['TimeStamp']).apply(timed
 data['ARR_TimeStamp'] = data['ARR_TimeStamp'] / 60
 
 data = data.drop(labels=['YEAR', 'MONTH', 'DAY', 'HOUR', 'MINUTE', 'ARR_HOUR', 'ARR_MIN', 'DAY_WEEK'], axis=1)
+
+
+FIPS_data = pd.read_csv('FIPS_Cleaned.csv')
+state_map = pd.Series(FIPS_data.State.values,index=FIPS_data.FIPS_State).to_dict()
+
+data['STATE'] = data['STATE'].map(state_map)
+
 data.to_csv('accident_new.csv')

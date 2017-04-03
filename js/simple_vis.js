@@ -358,7 +358,7 @@ var stateRaisedCount;
 var accident_facts;
 var population_map = {};
 
-var github_path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/state%20population.csv"
+var github_path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/state_population.csv"
 var local_path = "../Sample_Data/state_population.csv"
 d3.csv(github_path, (error, pops) => {
     if (error) {

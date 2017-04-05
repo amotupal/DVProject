@@ -242,7 +242,7 @@ statusRingChart
 var dateDim = ndx.dimension(function (d) {
     return d.date;
 });
-var hits = dateDim.group().reduceSum(function(d){
+var hits = dateDim.group().reduceSum(function (d) {
     return d.hits;
 });
 var minDate = dateDim.bottom(1)[0].date;
@@ -320,6 +320,10 @@ d3.csv(github_path, (error, pops) => {
     }
 });
 
+var geoJson;
+d3.json("../data/us_states.json", function (statesJson) {
+    geoJson = statesJson;
+});
 
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
 
@@ -327,15 +331,15 @@ var local_path = "../Sample_Data/accident_new.csv"
 
 d3.csv(path, (error, csv) => {
 
-    // csv.forEach((item) => {
-    //     // console.log(item);
-    //     var tempDate = new Date(item.TimeStamp);
-    //     item.TimeStamp = tempDate;
-    //     // console.log(item.TimeStamp);
+    csv.forEach((item) => {
+        // console.log(item);
+        var tempDate = new Date(item.TimeStamp);
+        item.TimeStamp = tempDate;
+        // console.log(item.TimeStamp);
 
-    // });
+    });
     // console.log(csv)
-    console.log(typeof csv.TimeStamp)
+    // console.log(typeof csv.TimeStamp)
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
@@ -363,41 +367,42 @@ d3.csv(path, (error, csv) => {
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
-    d3.json("../data/us_states.json", function (statesJson) {
-        usChart.width(960)
-            .height(500)
-            .dimension(states)
-            .group(stateRaisedCount)
-            .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
-            .colorDomain([bottom_state, top_state])
-            .colorAccessor(function (d) {
-                return d
-            })
-            .overlayGeoJson(statesJson.features, "state", function (d) {
-                return d.properties.name;
-            })
-            .valueAccessor(function (kv) {
-                //console.log("kv: ",kv);
-                return kv.value / population_map[kv.key];
-            })
-            .title(function (d) {
-                return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
-            });
-        dc.renderAll("map");
-    });
+
+    usChart.width(960)
+        .height(500)
+        .dimension(states)
+        .group(stateRaisedCount)
+        .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
+        .colorDomain([bottom_state, top_state])
+        .colorAccessor(function (d) {
+            return d
+        })
+        .overlayGeoJson(geoJson.features, "state", function (d) {
+            return d.properties.name;
+        })
+        .valueAccessor(function (kv) {
+            //console.log("kv: ",kv);
+            return kv.value / population_map[kv.key];
+        })
+        .title(function (d) {
+            return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+        });
     /************
 Stacked Area Chart
 *************/
-    // var hitslineChart = dc.lineChart("#dc-line-graph", "chart");
-    // var dateDim = accident_facts.dimension(function (d) {
-    //     return d.Timstamp;
-    // });
-    // var incidents = dateDim.group().reduceCount();
-    // var minDate = dateDim.bottom(1)[0].date;
-    // var maxDate = dateDim.top(1)[0].date;
-    // var fatalities = dateDim.group().ReduceSum(function (d) {
-    //     return d.FATALS;
-    // });
+    var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
+    var dateDim = accident_facts.dimension(function (d) {
+        return d.TimeStamp;
+    });
+    var incidents = dateDim.group().reduceCount();
+    // print_filter(incidents)
+    var minDate = dateDim.bottom(1)[0].TimeStamp;
+    var maxDate = dateDim.top(1)[0].TimeStamp;
+    var fatalities = dateDim.group().reduceSum(function (d) {
+        return d.FATALS;
+    });
+    // console.log(minDate, maxDate);
+    // print_filter(fatalities)
     // // var status_200 = dateDim.group().reduceSum(function (d) {
     // //     if (d.status === 'http_200') {
     // //         return d.hits;
@@ -420,33 +425,34 @@ Stacked Area Chart
     // //     }
     // // });
 
-    // hitslineChart
-    //     .width(500).height(200)
-    //     .dimension(dateDim)
-    //     .transitionDuration(1000)
-    //     .mouseZoomable(true)
-    //     // .group(status_200, "200")
-    //     // .stack(status_302, "302")
-    //     // .stack(status_404, "404")
-    //     .renderArea(true)
-    //     .x(d3.time.scale().domain([minDate, maxDate]))
-    //     .elasticX(true)
-    //     .brushOn(true)
-    //     .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-    //     .yAxisLabel("Hits per day")
-    //     .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
-    //     .title(function (d) {
-    //         return getvalues(d.data);
-    //     })
-    //     .margins({
-    //         top: 10,
-    //         left: 50,
-    //         right: 10,
-    //         bottom: 50
-    //     })
-    //     .renderlet(function (chart) {
-    //         chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
-    //     });
+    stackedAreaChart
+        .width(500).height(200)
+        .dimension(dateDim)
+        .transitionDuration(1000)
+        // .mouseZoomable(true)
+        .group(incidents, "incidents")
+        .stack(fatalities, "fatalities")
+        // .stack(status_404, "404")
+        .renderArea(true)
+        .x(d3.time.scale().domain([minDate, maxDate]))
+        .elasticX(true)
+        .brushOn(true)
+        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+        .yAxisLabel("Hits per day")
+        .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+        .title(function (d) {
+            return getvalues(d.data);
+        })
+        .margins({
+            top: 10,
+            left: 50,
+            right: 10,
+            bottom: 50
+        })
+        .on("renderlet.tic", function (chart) {
+            chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
+        });
+    dc.renderAll("map");
 });
 
 function print_filter(filter) {

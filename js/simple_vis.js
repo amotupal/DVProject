@@ -238,67 +238,6 @@ statusRingChart
     .renderLabel(true)
     .renderTitle(false)
     .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
-/************
-Stacked Area Chart
-*************/
-var hitslineChart = dc.lineChart("#dc-line-graph", "chart");
-var dateDim = ndx.dimension(function (d) {
-    return d.date;
-});
-var hits = dateDim.group().reduceSum(function (d) {
-    return d.hits;
-});
-var minDate = dateDim.bottom(1)[0].date;
-var maxDate = dateDim.top(1)[0].date;
-var status_200 = dateDim.group().reduceSum(function (d) {
-    if (d.status === 'http_200') {
-        return d.hits;
-    } else {
-        return 0;
-    }
-});
-var status_302 = dateDim.group().reduceSum(function (d) {
-    if (d.status === 'http_302') {
-        return d.hits;
-    } else {
-        return 0;
-    }
-});
-var status_404 = dateDim.group().reduceSum(function (d) {
-    if (d.status === 'http_404') {
-        return d.hits;
-    } else {
-        return 0;
-    }
-});
-
-hitslineChart
-    .width(500).height(200)
-    .dimension(dateDim)
-    .transitionDuration(1000)
-    .mouseZoomable(true)
-    .group(status_200, "200")
-    .stack(status_302, "302")
-    .stack(status_404, "404")
-    .renderArea(true)
-    .x(d3.time.scale().domain([minDate, maxDate]))
-    .elasticX(true)
-    .brushOn(true)
-    .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-    .yAxisLabel("Hits per day")
-    .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
-    .title(function (d) {
-        return getvalues(d.data);
-    })
-    .margins({
-        top: 10,
-        left: 50,
-        right: 10,
-        bottom: 50
-    })
-    .renderlet(function (chart) {
-        chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
-    });
 
 var volumeChart = dc.barChart("#dc-line-chart", "chart");
 var dayDim = ndx.dimension(function (d) {
@@ -426,6 +365,67 @@ d3.csv(path, (error, csv) => {
             });
         dc.renderAll("map");
     });
+    /************
+Stacked Area Chart
+*************/
+    var hitslineChart = dc.lineChart("#dc-line-graph", "chart");
+    var dateDim = ndx.dimension(function (d) {
+        return d.date;
+    });
+    var hits = dateDim.group().reduceSum(function (d) {
+        return d.hits;
+    });
+    var minDate = dateDim.bottom(1)[0].date;
+    var maxDate = dateDim.top(1)[0].date;
+    var status_200 = dateDim.group().reduceSum(function (d) {
+        if (d.status === 'http_200') {
+            return d.hits;
+        } else {
+            return 0;
+        }
+    });
+    var status_302 = dateDim.group().reduceSum(function (d) {
+        if (d.status === 'http_302') {
+            return d.hits;
+        } else {
+            return 0;
+        }
+    });
+    var status_404 = dateDim.group().reduceSum(function (d) {
+        if (d.status === 'http_404') {
+            return d.hits;
+        } else {
+            return 0;
+        }
+    });
+
+    hitslineChart
+        .width(500).height(200)
+        .dimension(dateDim)
+        .transitionDuration(1000)
+        .mouseZoomable(true)
+        .group(status_200, "200")
+        .stack(status_302, "302")
+        .stack(status_404, "404")
+        .renderArea(true)
+        .x(d3.time.scale().domain([minDate, maxDate]))
+        .elasticX(true)
+        .brushOn(true)
+        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+        .yAxisLabel("Hits per day")
+        .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+        .title(function (d) {
+            return getvalues(d.data);
+        })
+        .margins({
+            top: 10,
+            left: 50,
+            right: 10,
+            bottom: 50
+        })
+        .renderlet(function (chart) {
+            chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
+        });
 });
 
 function print_filter(filter) {

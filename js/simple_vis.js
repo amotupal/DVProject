@@ -239,6 +239,16 @@ statusRingChart
     .renderTitle(false)
     .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
 
+var dateDim = ndx.dimension(function (d) {
+    return d.date;
+});
+var hits = dateDim.group().reduceSum(function(d){
+    return d.hits;
+});
+var minDate = dateDim.bottom(1)[0].date;
+var maxDate = dateDim.top(1)[0].date;
+
+
 var volumeChart = dc.barChart("#dc-line-chart", "chart");
 var dayDim = ndx.dimension(function (d) {
     return d.date;
@@ -306,7 +316,7 @@ d3.csv(github_path, (error, pops) => {
         pops.forEach((item, index) => {
             population_map[item.State] = item.Population;
         });
-        console.log(population_map);
+        // console.log(population_map);
     }
 });
 
@@ -316,6 +326,16 @@ var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_D
 var local_path = "../Sample_Data/accident_new.csv"
 
 d3.csv(path, (error, csv) => {
+
+    // csv.forEach((item) => {
+    //     // console.log(item);
+    //     var tempDate = new Date(item.TimeStamp);
+    //     item.TimeStamp = tempDate;
+    //     // console.log(item.TimeStamp);
+
+    // });
+    console.log(csv)
+    print(typeof csv.date)
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
@@ -332,11 +352,11 @@ d3.csv(path, (error, csv) => {
     stateCounts.forEach((index, value) => {
         statevalues.push(index.value / population_map[index.key])
     });
-    console.log(statevalues)
+    // console.log(statevalues)
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
 
-    console.log(top_state, bottom_state)
+    // console.log(top_state, bottom_state)
 
     // orderedStateGroup = stateGroup.top(51)
     // var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
@@ -368,64 +388,65 @@ d3.csv(path, (error, csv) => {
     /************
 Stacked Area Chart
 *************/
-    var hitslineChart = dc.lineChart("#dc-line-graph", "chart");
-    var dateDim = ndx.dimension(function (d) {
-        return d.date;
-    });
-    var hits = dateDim.group().reduceSum(function (d) {
-        return d.hits;
-    });
-    var minDate = dateDim.bottom(1)[0].date;
-    var maxDate = dateDim.top(1)[0].date;
-    var status_200 = dateDim.group().reduceSum(function (d) {
-        if (d.status === 'http_200') {
-            return d.hits;
-        } else {
-            return 0;
-        }
-    });
-    var status_302 = dateDim.group().reduceSum(function (d) {
-        if (d.status === 'http_302') {
-            return d.hits;
-        } else {
-            return 0;
-        }
-    });
-    var status_404 = dateDim.group().reduceSum(function (d) {
-        if (d.status === 'http_404') {
-            return d.hits;
-        } else {
-            return 0;
-        }
-    });
+    // var hitslineChart = dc.lineChart("#dc-line-graph", "chart");
+    // var dateDim = accident_facts.dimension(function (d) {
+    //     return d.Timstamp;
+    // });
+    // var incidents = dateDim.group().reduceCount();
+    // var minDate = dateDim.bottom(1)[0].date;
+    // var maxDate = dateDim.top(1)[0].date;
+    // var fatalities = dateDim.group().ReduceSum(function (d) {
+    //     return d.FATALS;
+    // });
+    // // var status_200 = dateDim.group().reduceSum(function (d) {
+    // //     if (d.status === 'http_200') {
+    // //         return d.hits;
+    // //     } else {
+    // //         return 0;
+    // //     }
+    // // });
+    // // var status_302 = dateDim.group().reduceSum(function (d) {
+    // //     if (d.status === 'http_302') {
+    // //         return d.hits;
+    // //     } else {
+    // //         return 0;
+    // //     }
+    // // });
+    // // var status_404 = dateDim.group().reduceSum(function (d) {
+    // //     if (d.status === 'http_404') {
+    // //         return d.hits;
+    // //     } else {
+    // //         return 0;
+    // //     }
+    // // });
 
-    hitslineChart
-        .width(500).height(200)
-        .dimension(dateDim)
-        .transitionDuration(1000)
-        .mouseZoomable(true)
-        .group(status_200, "200")
-        .stack(status_302, "302")
-        .stack(status_404, "404")
-        .renderArea(true)
-        .x(d3.time.scale().domain([minDate, maxDate]))
-        .elasticX(true)
-        .brushOn(true)
-        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-        .yAxisLabel("Hits per day")
-        .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
-        .title(function (d) {
-            return getvalues(d.data);
-        })
-        .margins({
-            top: 10,
-            left: 50,
-            right: 10,
-            bottom: 50
-        })
-        .renderlet(function (chart) {
-            chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
-        });
+    // hitslineChart
+    //     .width(500).height(200)
+    //     .dimension(dateDim)
+    //     .transitionDuration(1000)
+    //     .mouseZoomable(true)
+    //     // .group(status_200, "200")
+    //     // .stack(status_302, "302")
+    //     // .stack(status_404, "404")
+    //     .renderArea(true)
+    //     .x(d3.time.scale().domain([minDate, maxDate]))
+    //     .elasticX(true)
+    //     .brushOn(true)
+    //     .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+    //     .yAxisLabel("Hits per day")
+    //     .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+    //     .title(function (d) {
+    //         return getvalues(d.data);
+    //     })
+    //     .margins({
+    //         top: 10,
+    //         left: 50,
+    //         right: 10,
+    //         bottom: 50
+    //     })
+    //     .renderlet(function (chart) {
+    //         chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
+    //     });
 });
 
 function print_filter(filter) {

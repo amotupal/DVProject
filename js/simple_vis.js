@@ -334,8 +334,8 @@ d3.csv(path, (error, csv) => {
     //     // console.log(item.TimeStamp);
 
     // });
-    console.log(csv)
-    print(typeof csv.date)
+    // console.log(csv)
+    console.log(typeof csv.TimeStamp)
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {

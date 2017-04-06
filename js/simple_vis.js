@@ -211,13 +211,13 @@ var year_total = yearDim.group().reduceSum(function (d) {
 });
 yearRingChart
     .width(180).height(180)
-    .legend(dc.legend().x(80).y(70).itemHeight(13).gap(5))
+    .legend(dc.legend().x(65).y(65).itemHeight(13).gap(5))
     .dimension(yearDim)
     .group(year_total)
     .innerRadius(45)
     .renderLabel(true)
-    .renderTitle(false)
-    .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+    .renderTitle(true)
+    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 /************
 Status Ring
 *************/
@@ -231,13 +231,13 @@ var hit_status = statusDim.group().reduceSum(function (d) {
 
 statusRingChart
     .width(180).height(180)
-    .legend(dc.legend().x(80).y(70).itemHeight(13).gap(5))
+    .legend(dc.legend().x(65).y(65).itemHeight(13).gap(5))
     .dimension(statusDim)
     .group(hit_status)
     .innerRadius(45)
     .renderLabel(true)
-    .renderTitle(false)
-    .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+    .renderTitle(true)
+    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 
 var dateDim = ndx.dimension(function (d) {
     return d.date;
@@ -297,8 +297,8 @@ $('#dc-yr-pie-graph').on('click', function () {
     var minDate2 = dateDim.bottom(1)[0].date;
     var maxDate2 = dateDim.top(1)[0].date;
     // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
-    hitslineChart.x(d3.time.scale().domain([minDate2, maxDate2]));
-    hitslineChart.redraw();
+    volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
+    volumeChart.redraw();
 });
 
 var demo;
@@ -321,7 +321,7 @@ d3.csv(github_path, (error, pops) => {
 });
 
 var geoJson;
-d3.json("../data/us_states.json", function (statesJson) {
+d3.json("Data/us_states.json", function (statesJson) {
     geoJson = statesJson;
 });
 
@@ -387,7 +387,7 @@ d3.csv(path, (error, csv) => {
         .title(function (d) {
             return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
         });
-    /************
+/************
 Stacked Area Chart
 *************/
     var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
@@ -401,45 +401,21 @@ Stacked Area Chart
     var fatalities = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
-    // console.log(minDate, maxDate);
-    // print_filter(fatalities)
-    // // var status_200 = dateDim.group().reduceSum(function (d) {
-    // //     if (d.status === 'http_200') {
-    // //         return d.hits;
-    // //     } else {
-    // //         return 0;
-    // //     }
-    // // });
-    // // var status_302 = dateDim.group().reduceSum(function (d) {
-    // //     if (d.status === 'http_302') {
-    // //         return d.hits;
-    // //     } else {
-    // //         return 0;
-    // //     }
-    // // });
-    // // var status_404 = dateDim.group().reduceSum(function (d) {
-    // //     if (d.status === 'http_404') {
-    // //         return d.hits;
-    // //     } else {
-    // //         return 0;
-    // //     }
-    // // });
 
     stackedAreaChart
-        .width(500).height(200)
+        .width(1100).height(300)
         .dimension(dateDim)
-        .transitionDuration(1000)
+        //.transitionDuration(1000)
         // .mouseZoomable(true)
         .group(incidents, "incidents")
         .stack(fatalities, "fatalities")
-        // .stack(status_404, "404")
         .renderArea(true)
         .x(d3.time.scale().domain([minDate, maxDate]))
         .elasticX(true)
         .brushOn(true)
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
         .yAxisLabel("Hits per day")
-        .colors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+        .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
         .title(function (d) {
             return getvalues(d.data);
         })

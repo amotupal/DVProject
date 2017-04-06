@@ -362,7 +362,7 @@ Stacked Area Chart
         .width(1000).height(400)
         .dimension(dateDim)
         //.transitionDuration(1000)
-        .mouseZoomable(true)
+        // .mouseZoomable(true)
         .group(incidents, "incidents")
         .stack(fatalities, "fatalities")
         .renderArea(true)

@@ -189,7 +189,7 @@ var data = [{
         "date": "12/30/2012"
     },
 ];
-
+var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 var ndx = crossfilter(data);
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
@@ -211,12 +211,12 @@ var year_total = yearDim.group().reduceSum(function (d) {
 });
 yearRingChart
     .width(180).height(180)
-    .legend(dc.legend().x(65).y(65).itemHeight(13).gap(5))
+    .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
     .dimension(yearDim)
     .group(year_total)
     .innerRadius(45)
-    .renderLabel(true)
-    .renderTitle(true)
+    .renderLabel(false)
+    .renderTitle(false)
     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 /************
 Status Ring
@@ -239,9 +239,9 @@ statusRingChart
     .dimension(statusDim)
     .group(hit_status)
     .innerRadius(45)
-    .renderLabel(true)
+    .renderLabel(false)
     .renderTitle(false)
-    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 
 dc.renderAll("chart");
 
@@ -328,7 +328,7 @@ d3.csv(path, (error, csv) => {
         .height(500)
         .dimension(states)
         .group(stateRaisedCount)
-        .colors(["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"])
+        .colors(color_sheme)
         .colorDomain([bottom_state, top_state])
         .colorAccessor(function (d) {
             return d
@@ -357,12 +357,12 @@ Stacked Area Chart
     var fatalities = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
-
+    console.log("minDate: ",minDate,", maxDate: ",maxDate);
     stackedAreaChart
-        .width(1100).height(300)
+        .width(1000).height(400)
         .dimension(dateDim)
         //.transitionDuration(1000)
-        // .mouseZoomable(true)
+        .mouseZoomable(true)
         .group(incidents, "incidents")
         .stack(fatalities, "fatalities")
         .renderArea(true)
@@ -376,15 +376,8 @@ Stacked Area Chart
             console.log(d);
             return getvalues(d.data);
         })
-        .margins({
-            top: 10,
-            left: 50,
-            right: 10,
-            bottom: 50
-        })
-        .on("renderlet.tic", function (chart) {
-            chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
-        });
+        .margins({ top: 10, left: 50, right: 10, bottom: 50 });
+        
 
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
@@ -436,6 +429,10 @@ Stacked Area Chart
         dateDim.filterAll();
         return str;
     }
+        
+        // .on("renderlet.tic", function (chart) {
+        //     chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
+        // });
     dc.renderAll("map");
 });
 

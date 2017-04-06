@@ -1,6 +1,6 @@
 var chart = d3.parsets()
     .dimensions(["Survived", "Sex", "Age", "Class"])
-    .width(800).height(500)
+    .width(1000).height(600)
     .duration(3000);
 
 var vis = d3.select("#dc-parallel-graph").append("svg")

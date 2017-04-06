@@ -229,6 +229,10 @@ var hit_status = statusDim.group().reduceSum(function (d) {
     return d.hits;
 });
 
+var dateDim = ndx.dimension(function (d) {
+    return d.date;
+});
+
 statusRingChart
     .width(180).height(180)
     .legend(dc.legend().x(65).y(65).itemHeight(13).gap(5))
@@ -236,61 +240,12 @@ statusRingChart
     .group(hit_status)
     .innerRadius(45)
     .renderLabel(true)
-    .renderTitle(true)
-    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
-
-var dateDim = ndx.dimension(function (d) {
-    return d.date;
-});
-var hits = dateDim.group().reduceSum(function (d) {
-    return d.hits;
-});
-var minDate = dateDim.bottom(1)[0].date;
-var maxDate = dateDim.top(1)[0].date;
-
-
-var volumeChart = dc.barChart("#dc-line-chart", "chart");
-var dayDim = ndx.dimension(function (d) {
-    return d.date;
-});
-var day_total = dayDim.group().reduceSum(function (d) {
-    return d.hits;
-});
-
-//print_filter("day_total");
-
-volumeChart
-    .width(500).height(80)
-    .margins({
-        top: 10,
-        left: 50,
-        right: 20,
-        bottom: 20
-    })
-    .dimension(dayDim)
-    .group(day_total)
-    .centerBar(true)
-    .gap(2)
-    .x(d3.time.scale().domain([minDate, maxDate]))
-    .round(d3.time.days.round)
-    .xUnits(d3.time.days)
-    .elasticX(true)
-    .yAxis().ticks(4);
-
-function getvalues(d) {
-    var str = d.key.getDate() + "/" + (d.key.getMonth() + 1) + "/" + d.key.getFullYear() + "\n";
-    var key_filter = dateDim.filter(d.key).top(Infinity);
-    var total = 0
-    key_filter.forEach(function (a) {
-        str += a.status + ": " + a.hits + " Hit(s)\n";
-        total += a.hits;
-    });
-    str += "Total:" + total;
-    dateDim.filterAll();
-    return str;
-}
+    .renderTitle(false)
+    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
 
 dc.renderAll("chart");
+
+
 
 $('#dc-yr-pie-graph').on('click', function () {
 
@@ -335,6 +290,7 @@ d3.csv(path, (error, csv) => {
         // console.log(item);
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
+
         // console.log(item.TimeStamp);
 
     });
@@ -392,7 +348,7 @@ Stacked Area Chart
 *************/
     var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
     var dateDim = accident_facts.dimension(function (d) {
-        return d.TimeStamp;
+        return d.TimeStamp.getMonth();
     });
     var incidents = dateDim.group().reduceCount();
     // print_filter(incidents)
@@ -410,13 +366,14 @@ Stacked Area Chart
         .group(incidents, "incidents")
         .stack(fatalities, "fatalities")
         .renderArea(true)
-        .x(d3.time.scale().domain([minDate, maxDate]))
+        .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
         .elasticX(true)
         .brushOn(true)
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-        .yAxisLabel("Hits per day")
+        .yAxisLabel("per day")
         .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
         .title(function (d) {
+            console.log(d);
             return getvalues(d.data);
         })
         .margins({
@@ -428,6 +385,57 @@ Stacked Area Chart
         .on("renderlet.tic", function (chart) {
             chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
         });
+
+    var hits = dateDim.group().reduceSum(function (d) {
+        return d.FATALS;
+    });
+    var minDate = dateDim.bottom(1)[0].date;
+    var maxDate = dateDim.top(1)[0].date;
+
+
+    var volumeChart = dc.barChart("#dc-line-chart", "map");
+    var month_total = dateDim.group().reduceCount();
+
+    //print_filter("day_total");
+
+    volumeChart
+        .width(500).height(80)
+        .margins({
+            top: 10,
+            left: 50,
+            right: 20,
+            bottom: 20
+        })
+        .dimension(dateDim)
+        .group(month_total)
+        // .centerBar(true)
+        .gap(2)
+        .x(d3.time.scale().domain([minDate, maxDate]))
+        .round(d3.time.months)
+        .xUnits(d3.time.months)
+        // .xUnits(function (d) {
+        //     var m = d.getMonth();
+        //     var y = d.getFullYear();
+        //     return new Date(y, m, 0).getUTCDate();
+
+        // })
+        .elasticX(true);
+        // .yAxis().ticks(4);
+
+    volumeChart.xAxis().ticks(11).tickValues();
+
+    function getvalues(d) {
+        var str = d.key.getDate() + "/" + (d.key.getMonth() + 1) + "/" + d.key.getFullYear() + "\n";
+        var key_filter = dateDim.filter(d.key).top(Infinity);
+        var total = 0
+        key_filter.forEach(function (a) {
+            str += a.status + ": " + a.FATALS + " Hit(s)\n";
+            total += a.FATALS;
+        });
+        str += "Total:" + total;
+        dateDim.filterAll();
+        return str;
+    }
     dc.renderAll("map");
 });
 

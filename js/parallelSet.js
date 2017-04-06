@@ -14,7 +14,10 @@ var partition = d3.layout.partition()
     .value(function(d) { return d.count; });
 
 var das,root1,csv1;
-d3.csv("data/titanic.csv", function(error, csv) {
+var local_path_titanic = "data/titanic.csv";
+var github_path_titanic = "https://raw.githubusercontent.com/amotupal/DVProject/master/Data/titanic.csv";
+
+d3.csv(github_path_titanic, function(error, csv) {
     vis.datum(csv).call(chart);
     var newIce = this.checked,
         tension = chart.tension();

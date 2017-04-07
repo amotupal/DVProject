@@ -189,6 +189,96 @@ var data = [{
         "date": "12/30/2012"
     },
 ];
+
+var state_shape = [{
+    "WA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WA.geo.json",
+    "NV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NV.geo.json",
+    "ID": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ID.geo.json",
+    "AK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AK.geo.json",
+    "KY": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KY.geo.json",
+    "NC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NC.geo.json",
+    "ND": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ND.geo.json",
+    "CO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/CO.geo.json",
+    "NJ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NJ.geo.json",
+    "TN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/TN.geo.json",
+    "SC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SC.geo.json",
+    "FL": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/FL.geo.json",
+    "AZ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AZ.geo.json",
+    "IN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AR.geo.json",
+    "MI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MI.geo.json",
+    "OK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OK.geo.json",
+    "OR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OR.geo.json",
+    "PR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/PR.geo.json",
+    "KS": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KS.geo.json",
+    "OH": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OH.geo.json",
+    "DC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/DC.geo.json",
+    "UT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/UT.geo.json",
+    "VI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/VI.geo.json",
+    "WI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WI.geo.json",
+    "SD": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SD.geo.json",
+    "MT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MT.geo.json",
+    "MO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MO.geo.json",
+    "WV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WV.geo.json",
+    "GU": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/GU.geo.json"
+}];
+var full_states = [{
+    "WA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WA.geo.json",
+    "NV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NV.geo.json",
+    "ID": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ID.geo.json",
+    "AK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AK.geo.json",
+    "KY": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KY.geo.json",
+    "NC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NC.geo.json",
+    "ND": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ND.geo.json",
+    "CO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/CO.geo.json",
+    "NJ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NJ.geo.json",
+    "TN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/TN.geo.json",
+    "SC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SC.geo.json",
+    "FL": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/FL.geo.json",
+    "AZ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AZ.geo.json",
+    "IN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/IN.geo.json",
+    "HI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/HI.geo.json",
+    "ME": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ME.geo.json",
+    "NY": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NY.geo.json",
+    "DE": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/DE.geo.json",
+    "IA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/IA.geo.json",
+    "GA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/GA.geo.json",
+    "NE": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NE.geo.json",
+    "MD": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MD.geo.json",
+    "TX": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/TX.geo.json",
+    "MP": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MP.geo.json",
+    "CT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/CT.geo.json",
+    "VT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/VT.geo.json",
+    "WY": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WY.geo.json",
+    "LA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/LA.geo.json",
+    "AL": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AL.geo.json",
+    "MA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MA.geo.json",
+    "CA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/CA.geo.json",
+    "PA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/PA.geo.json",
+    "AS": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AS.geo.json",
+    "MN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MN.geo.json",
+    "NH": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NH.geo.json",
+    "NM": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NM.geo.json",
+    "VA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/VA.geo.json",
+    "IL": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/IL.geo.json",
+    "MS": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MS.geo.json",
+    "RI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/RI.geo.json",
+    "AR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AR.geo.json",
+    "MI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MI.geo.json",
+    "OK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OK.geo.json",
+    "OR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OR.geo.json",
+    "PR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/PR.geo.json",
+    "KS": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KS.geo.json",
+    "OH": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OH.geo.json",
+    "DC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/DC.geo.json",
+    "UT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/UT.geo.json",
+    "VI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/VI.geo.json",
+    "WI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WI.geo.json",
+    "SD": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SD.geo.json",
+    "MT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MT.geo.json",
+    "MO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MO.geo.json",
+    "WV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WV.geo.json",
+    "GU": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/GU.geo.json"
+}];
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 var ndx = crossfilter(data);
 var parseDate = d3.time.format("%m/%d/%Y").parse;
@@ -343,9 +433,9 @@ d3.csv(path, (error, csv) => {
         .title(function (d) {
             return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
         });
-/************
-Stacked Area Chart
-*************/
+    /************
+    Stacked Area Chart
+    *************/
     var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
     var dateDim = accident_facts.dimension(function (d) {
         return d.TimeStamp.getMonth();
@@ -357,7 +447,7 @@ Stacked Area Chart
     var fatalities = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
-    console.log("minDate: ",minDate,", maxDate: ",maxDate);
+    console.log("minDate: ", minDate, ", maxDate: ", maxDate);
     stackedAreaChart
         .width(1000).height(400)
         .dimension(dateDim)
@@ -376,8 +466,13 @@ Stacked Area Chart
             console.log(d);
             return getvalues(d.data);
         })
-        .margins({ top: 10, left: 50, right: 10, bottom: 50 });
-        
+        .margins({
+            top: 10,
+            left: 50,
+            right: 10,
+            bottom: 50
+        });
+
 
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
@@ -413,7 +508,7 @@ Stacked Area Chart
 
         // })
         .elasticX(true);
-        // .yAxis().ticks(4);
+    // .yAxis().ticks(4);
 
     volumeChart.xAxis().ticks(11).tickValues();
 
@@ -429,10 +524,10 @@ Stacked Area Chart
         dateDim.filterAll();
         return str;
     }
-        
-        // .on("renderlet.tic", function (chart) {
-        //     chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
-        // });
+
+    // .on("renderlet.tic", function (chart) {
+    //     chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
+    // });
     dc.renderAll("map");
 });
 

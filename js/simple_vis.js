@@ -190,37 +190,6 @@ var data = [{
     },
 ];
 
-var state_shape = [{
-    "WA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WA.geo.json",
-    "NV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NV.geo.json",
-    "ID": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ID.geo.json",
-    "AK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AK.geo.json",
-    "KY": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KY.geo.json",
-    "NC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NC.geo.json",
-    "ND": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/ND.geo.json",
-    "CO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/CO.geo.json",
-    "NJ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NJ.geo.json",
-    "TN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/TN.geo.json",
-    "SC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SC.geo.json",
-    "FL": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/FL.geo.json",
-    "AZ": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AZ.geo.json",
-    "IN": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/AR.geo.json",
-    "MI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MI.geo.json",
-    "OK": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OK.geo.json",
-    "OR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OR.geo.json",
-    "PR": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/PR.geo.json",
-    "KS": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/KS.geo.json",
-    "OH": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/OH.geo.json",
-    "DC": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/DC.geo.json",
-    "UT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/UT.geo.json",
-    "VI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/VI.geo.json",
-    "WI": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WI.geo.json",
-    "SD": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/SD.geo.json",
-    "MT": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MT.geo.json",
-    "MO": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/MO.geo.json",
-    "WV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WV.geo.json",
-    "GU": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/GU.geo.json"
-}];
 var full_states = [{
     "WA": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/WA.geo.json",
     "NV": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/NV.geo.json",
@@ -280,6 +249,10 @@ var full_states = [{
     "GU": "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/states/GU.geo.json"
 }];
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
+
+// var color_sheme = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026']
+// ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
+// ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 var ndx = crossfilter(data);
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
@@ -413,6 +386,11 @@ d3.csv(path, (error, csv) => {
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
+var scale = Math.min(960 * 1.2, 500 * 2.1);
+
+var projection = albersUsaPr()
+      .scale(scale)
+      .translate([width / 2, height / 2]);
 
     usChart.width(960)
         .height(500)
@@ -420,6 +398,7 @@ d3.csv(path, (error, csv) => {
         .group(stateRaisedCount)
         .colors(color_sheme)
         .colorDomain([bottom_state, top_state])
+        .projection(projection)
         .colorAccessor(function (d) {
             return d
         })
@@ -433,6 +412,67 @@ d3.csv(path, (error, csv) => {
         .title(function (d) {
             return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
         });
+
+    counties = accident_facts.dimension(function (d) {
+        return d.COUNTY;
+    });
+    countyGroup = counties.group();
+    countyRaisedCount = countyGroup.reduceCount();
+    countyCounts = countyRaisedCount.all()
+
+    countyRaisedFatalities = countyGroup.reduceSum(function (d) {
+        return d.FATALS;
+    });
+    var countyvalues = []
+    countyCounts.forEach((index, value) => {
+        countyvalues.push(index.value / population_map[index.key])
+    });
+    // console.log(countyvalues)
+    var top_county = d3.max(countyvalues)
+    var bottom_county = d3.min(countyvalues)
+
+
+    // console.log(top_county, bottom_county)
+
+    // orderedcountyGroup = countyGroup.top(51)
+    // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];
+    // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
+
+    // var countyChart = dc.geoChoroplethChart("#dc-map-counties", "map");
+
+    // countyChart.width(960)
+    //     .height(500)
+    //     .dimension(counties)
+    //     .group(countyRaisedCount)
+    //     .colors(color_sheme)
+    //     .colorDomain([bottom_county, top_county])
+    //     .colorAccessor(function (d) {
+    //         return d
+    //     })
+    //     .overlayGeoJson(statesJson.features, "county", function (d) {
+    //         return d.properties.name;
+    //     })
+    //     .valueAccessor(function (kv) {
+    //         //console.log("kv: ",kv);
+    //         return kv.value / population_map[kv.key];
+    //     })
+    //     .title(function (d) {
+    //         return "county: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+    //     });
+
+
+
+
+        // dc-map-counties
+    $('#dc-map-chart').on('click', function (d) {
+        var selected_states = usChart.filters()
+        console.log(selected_states.length)
+        // var minDate2 = dateDim.bottom(1)[0].date;
+        // var maxDate2 = dateDim.top(1)[0].date;
+        // // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
+        // volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
+        // volumeChart.redraw();
+    });
     /************
     Stacked Area Chart
     *************/

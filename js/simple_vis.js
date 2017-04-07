@@ -386,11 +386,11 @@ d3.csv(path, (error, csv) => {
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
-var scale = Math.min(960 * 1.2, 500 * 2.1);
+// var scale = Math.min(960 * 1.2, 500 * 2.1);
 
-var projection = albersUsaPr()
-      .scale(scale)
-      .translate([width / 2, height / 2]);
+// var projection = albersUsaPr()
+//       .scale(scale)
+//       .translate([width / 2, height / 2]);
 
     usChart.width(960)
         .height(500)
@@ -398,7 +398,7 @@ var projection = albersUsaPr()
         .group(stateRaisedCount)
         .colors(color_sheme)
         .colorDomain([bottom_state, top_state])
-        .projection(projection)
+        // .projection(projection)
         .colorAccessor(function (d) {
             return d
         })

@@ -419,10 +419,11 @@ d3.csv(path, (error, csv) => {
     countyGroup = counties.group();
     countyRaisedCount = countyGroup.reduceCount();
     countyCounts = countyRaisedCount.all()
-
+    print_filter(countyRaisedCount)
     countyRaisedFatalities = countyGroup.reduceSum(function (d) {
         return d.FATALS;
     });
+
     var countyvalues = []
     countyCounts.forEach((index, value) => {
         countyvalues.push(index.value / population_map[index.key])
@@ -432,7 +433,7 @@ d3.csv(path, (error, csv) => {
     var bottom_county = d3.min(countyvalues)
 
 
-    // console.log(top_county, bottom_county)
+    console.log(top_county, bottom_county)
 
     // orderedcountyGroup = countyGroup.top(51)
     // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];

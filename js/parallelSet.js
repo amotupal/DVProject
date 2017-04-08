@@ -29,10 +29,10 @@ d3.csv(github_path_titanic, function(error, csv) {
         nodes = partition(root),
         nodesByPath = {};
         root1 = root;
-        console.log("nodes: ",nodes);
+        // console.log("nodes: ",nodes);
     nodes.forEach(function(d) {
       das = d;
-      console.log("d: ",d);
+    //   console.log("d: ",d);
       var path = d.data.name,
           p = d;
       while ((p = p.parent) && p.data.name) {

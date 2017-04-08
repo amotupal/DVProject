@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import os
 
 data = pd.read_csv('accident.csv', dtype={'YEAR': object, 'MONTH': object, 'DAY': object,
-                                          'HOUR': object, 'MINUTE': object, 'ARR_HOUR': object, 'ARR_MIN': object, 'STATE':object, 'COUNTY':object})
+                                          'HOUR': object, 'MINUTE': object, 'ARR_HOUR': object, 'ARR_MIN': object, 'STATE': object, 'COUNTY': object})
 
 
 def fix_length(val):
@@ -12,16 +12,14 @@ def fix_length(val):
     else:
         return val
 
+
 def fix_length_state(val):
-    if(len(val)==1):
+    if(len(val) == 1):
         return '00' + val
     elif(len(val) == 2):
         return '0' + val
     else:
         return val
-
-
-
 
 
 data['MONTH'] = data['MONTH'].apply(fix_length)
@@ -71,7 +69,8 @@ data = data.drop(labels=['YEAR', 'MONTH', 'DAY', 'HOUR',
                          'MINUTE', 'ARR_HOUR', 'ARR_MIN', 'DAY_WEEK'], axis=1)
 
 
-FIPS_data = pd.read_csv('FIPS_Cleaned.csv', dtype={'State':object, 'County':object, 'FIPS_State':object, 'FIPS_County':object})
+FIPS_data = pd.read_csv('FIPS_Cleaned.csv', dtype={
+                        'State': object, 'County': object, 'FIPS_State': object, 'FIPS_County': object})
 state_map = pd.Series(FIPS_data.State.values,
                       index=FIPS_data.FIPS_State).to_dict()
 
@@ -84,15 +83,18 @@ data['STATE'] = data['STATE'].map(state_map)
 
 data['State_County'] = data['STATE'] + data['COUNTY']
 
+
 def fix_county(row):
     FIPS_data_state = FIPS_data[FIPS_data['State'] == row['STATE']]
     # FIPS_data_state['County'][FIPS_data_state['FIPS_County'] == row['COUNTY']].values
-    # if(len(FIPS_data_state[FIPS_data_state['FIPS_County'] == row['COUNTY']]['County']) != 1):
-    return FIPS_data_state[FIPS_data_state['FIPS_County'] == row['COUNTY']]['County'].values[0]
+    # if(len(FIPS_data_state[FIPS_data_state['FIPS_County'] ==
+    # row['COUNTY']]['County']) != 1):
+    return FIPS_data_state[FIPS_data_state['FIPS_County'] == row['COUNTY']]['County'].values[0].replace(" County", "")
 
     # print(FIPS_data['State'] == row['STATE'] and )
     # print(FIPS_data['County'][FIPS_data['State'] == row['STATE']] and FIPS_data['FIPS_County'] == row['COUNTY']][0])
     # print(row['COUNTY'])
+
 
 data = data[data['COUNTY'] != '000']
 
@@ -105,8 +107,8 @@ print(len(pd.unique(data['COUNTY'] + data['STATE'])))
 
 # for row in FIPS_data.itertuples():
 #     for bigrow,idx in data.iter
-    
-    # data['COUNTY'][(data['STATE'] == row.State) and (data['COUNTY'] == row.FIPS_County)] = row.County
+
+# data['COUNTY'][(data['STATE'] == row.State) and (data['COUNTY'] == row.FIPS_County)] = row.County
 
 # for()
 
@@ -117,7 +119,7 @@ print(len(pd.unique(data['COUNTY'] + data['STATE'])))
 
 # for val in zip(data[['STATE', 'COUNTY']].values):
 #     print(val[0])
-    # if(val[0] == 'nan'):
-    #     print("nan")
+# if(val[0] == 'nan'):
+#     print("nan")
 
 data.to_csv('accident_new.csv')

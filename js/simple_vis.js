@@ -252,6 +252,8 @@ full_states['GU'] = "https://raw.githubusercontent.com/amotupal/DVProject/master
 
 var countyJson = {};
 
+var usCounties;
+
 // full_states[0].keys().forEach((d) => {
 //     console.log(d);
 // })
@@ -270,8 +272,12 @@ for (propertyName in full_states) {
     
     // console.log(readGeoJSon(propertyName))
 }
+var usCountiesJsonPath = "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/gz_2010_us_050_00_20m.json"
 
-
+d3.json(usCountiesJsonPath, (_usCounties) => {
+    usCounties = _usCounties;
+    console.log(usCounties);
+})
 
 
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
@@ -388,7 +394,7 @@ d3.csv(path, (error, csv) => {
     accident_facts = crossfilter(csv);
 
     states = accident_facts.dimension(function (d) {
-        return d.STATE;
+        return d.GEO_ID;
     });
     stateGroup = states.group();
     stateRaisedCount = stateGroup.reduceCount();
@@ -399,13 +405,14 @@ d3.csv(path, (error, csv) => {
     });
     var statevalues = []
     stateCounts.forEach((index, value) => {
-        statevalues.push(index.value / population_map[index.key])
+        statevalues.push(index.value)
+        //  / population_map[index.key])
     });
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
 
     // console.log(top_state, bottom_state)
-
+    print_filter(stateRaisedCount)
     // orderedStateGroup = stateGroup.top(51)
     // var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
@@ -426,12 +433,13 @@ d3.csv(path, (error, csv) => {
         .colorAccessor(function (d) {
             return d;
         })
-        .overlayGeoJson(geoJson.features, "state", function (d) {
-            return d.properties.name;
+        .overlayGeoJson(usCounties.features, "state", function (d) {
+            return d.properties.GEO_ID;
         })
         .valueAccessor(function (kv) {
-            //console.log("kv: ",kv);
-            return kv.value / population_map[kv.key];
+            // console.log("kv: ",kv);
+            return kv.value ;
+            // / population_map[kv.key];
         })
         .title(function (d) {
             // console.log(d);
@@ -440,70 +448,70 @@ d3.csv(path, (error, csv) => {
 
 
 
-    var state = 'AZ';
-    // states.filterExact(state);
-    counties = accident_facts.dimension(function (d) {
-        return d.COUNTY;
-    });
-    countyGroup = counties.group();
-
-    countyRaisedCount = countyGroup.reduceCount();
-    // counties.filterFunction(function(d,k){
-    //     // console.log(d, k)
-    //     return k > 0;
-    // })
-
-    // countyCounts = countyRaisedCount.all()
-    // print_filter(countyRaisedCount)
-    // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
-    //     return d.FATALS;
+    // var state = 'AZ';
+    // // states.filterExact(state);
+    // counties = accident_facts.dimension(function (d) {
+    //     return d.COUNTY;
     // });
+    // countyGroup = counties.group();
 
-    // var countyvalues = []
-    // countyCounts.forEach((index, value) => {
-    //     if (index.key[0] == state) {
-    //         countyvalues.push(index.value)
-    //     }
+    // countyRaisedCount = countyGroup.reduceCount();
+    // // counties.filterFunction(function(d,k){
+    // //     // console.log(d, k)
+    // //     return k > 0;
+    // // })
 
-    //     //  / population_map[index.key])
-    // });
-    // // console.log(countyvalues)
-    // var top_county = d3.max(countyvalues)
-    // var bottom_county = d3.min(countyvalues)
+    // // countyCounts = countyRaisedCount.all()
+    // // print_filter(countyRaisedCount)
+    // // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
+    // //     return d.FATALS;
+    // // });
+
+    // // var countyvalues = []
+    // // countyCounts.forEach((index, value) => {
+    // //     if (index.key[0] == state) {
+    // //         countyvalues.push(index.value)
+    // //     }
+
+    // //     //  / population_map[index.key])
+    // // });
+    // // // console.log(countyvalues)
+    // // var top_county = d3.max(countyvalues)
+    // // var bottom_county = d3.min(countyvalues)
 
 
-    // // console.log(top_county, bottom_county)
+    // // // console.log(top_county, bottom_county)
 
-    // // orderedcountyGroup = countyGroup.top(51)
-    // // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];
-    // // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
+    // // // orderedcountyGroup = countyGroup.top(51)
+    // // // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];
+    // // // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
 
-    var countyChart = dc.geoChoroplethChart("#dc-map-counties", "chart");
-    // console.log(countyJson[state])
-    countyChart.width(1460)
-        .height(1000)
-        .dimension(counties)
-        .group(countyRaisedCount)
-        // .colors(color_sheme)
-        // .colorDomain([bottom_county, top_county])
-        // .colorAccessor(function (d) {
-        //     console.log(d);
-        //     return d;
-        // })
-        .overlayGeoJson(countyJson[state], "county", function (d) {
-            // console.log(d);
-            return d.features.counties.name;
-        })
-        .valueAccessor(function (kv) {
-            // console.log("kv: ",kv);
-            return kv.value;
-            //  / population_map[kv.key];
-        })
-        .title(function (d) {
-            return "county: " + d.key[1] + "\nAccidents per 10000 people: " + numberFormat(d.value ? d.value : 0);
-        });
+    // var countyChart = dc.geoChoroplethChart("#dc-map-counties", "chart");
+    // // console.log(countyJson[state])
+    // countyChart.width(1460)
+    //     .height(1000)
+    //     .dimension(counties)
+    //     .group(countyRaisedCount)
+    //     // .colors(color_sheme)
+    //     // .colorDomain([bottom_county, top_county])
+    //     // .colorAccessor(function (d) {
+    //     //     console.log(d);
+    //     //     return d;
+    //     // })
+    //     .overlayGeoJson(countyJson[state], "county", function (d) {
+    //         // console.log(d);
+    //         return d.features.counties.name;
+    //     })
+    //     .valueAccessor(function (kv) {
+    //         // console.log("kv: ",kv);
+    //         return kv.value;
+    //         //  / population_map[kv.key];
+    //     })
+    //     .title(function (d) {
+    //         return "county: " + d.key[1] + "\nAccidents per 10000 people: " + numberFormat(d.value ? d.value : 0);
+    //     });
 
-dc.renderAll("chart")
+// dc.renderAll("chart")
 
 
     $('#dc-map-chart').on('click', function (d) {

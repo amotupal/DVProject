@@ -401,7 +401,6 @@ d3.csv(path, (error, csv) => {
     stateCounts.forEach((index, value) => {
         statevalues.push(index.value / population_map[index.key])
     });
-    // console.log(statevalues)
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
 
@@ -425,7 +424,7 @@ d3.csv(path, (error, csv) => {
         .colorDomain([bottom_state, top_state])
         // .projection(projection)
         .colorAccessor(function (d) {
-            return d
+            return d;
         })
         .overlayGeoJson(geoJson.features, "state", function (d) {
             return d.properties.name;
@@ -435,49 +434,52 @@ d3.csv(path, (error, csv) => {
             return kv.value / population_map[kv.key];
         })
         .title(function (d) {
+            // console.log(d);
             return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
         });
 
 
 
     var state = 'AZ';
-    states.filterExact(state);
+    // states.filterExact(state);
     counties = accident_facts.dimension(function (d) {
         return d.COUNTY;
     });
     countyGroup = counties.group();
 
     countyRaisedCount = countyGroup.reduceCount();
-    counties.filterFunction(function(d){
-        return d > 0
-    })
-    countyCounts = countyRaisedCount.all()
-    print_filter(countyRaisedCount)
-    countyRaisedFatalities = countyGroup.reduceSum(function (d) {
-        return d.FATALS;
-    });
+    // counties.filterFunction(function(d,k){
+    //     // console.log(d, k)
+    //     return k > 0;
+    // })
 
-    var countyvalues = []
-    countyCounts.forEach((index, value) => {
-        if (index.key[0] == state) {
-            countyvalues.push(index.value)
-        }
+    // countyCounts = countyRaisedCount.all()
+    // print_filter(countyRaisedCount)
+    // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
+    //     return d.FATALS;
+    // });
 
-        //  / population_map[index.key])
-    });
-    // console.log(countyvalues)
-    var top_county = d3.max(countyvalues)
-    var bottom_county = d3.min(countyvalues)
+    // var countyvalues = []
+    // countyCounts.forEach((index, value) => {
+    //     if (index.key[0] == state) {
+    //         countyvalues.push(index.value)
+    //     }
+
+    //     //  / population_map[index.key])
+    // });
+    // // console.log(countyvalues)
+    // var top_county = d3.max(countyvalues)
+    // var bottom_county = d3.min(countyvalues)
 
 
-    // console.log(top_county, bottom_county)
+    // // console.log(top_county, bottom_county)
 
-    // orderedcountyGroup = countyGroup.top(51)
-    // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];
-    // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
+    // // orderedcountyGroup = countyGroup.top(51)
+    // // var top_county = orderedcountyGroup[0].value / population_map[orderedcountyGroup[0].key];
+    // // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
 
     var countyChart = dc.geoChoroplethChart("#dc-map-counties", "chart");
-    console.log(countyJson[state])
+    // console.log(countyJson[state])
     countyChart.width(1460)
         .height(1000)
         .dimension(counties)
@@ -489,7 +491,7 @@ d3.csv(path, (error, csv) => {
         //     return d;
         // })
         .overlayGeoJson(countyJson[state], "county", function (d) {
-            console.log(d);
+            // console.log(d);
             return d.features.counties.name;
         })
         .valueAccessor(function (kv) {
@@ -504,7 +506,6 @@ d3.csv(path, (error, csv) => {
 dc.renderAll("chart")
 
 
-    // dc-map-counties
     $('#dc-map-chart').on('click', function (d) {
         var selected_states = usChart.filters()
         // console.log(selected_states.length)
@@ -522,9 +523,9 @@ dc.renderAll("chart")
         return d.TimeStamp.getMonth();
     });
     var incidents = dateDim.group().reduceCount();
-    // print_filter(incidents)
-    var minDate = dateDim.bottom(1)[0].TimeStamp;
-    var maxDate = dateDim.top(1)[0].TimeStamp;
+    // print_filter()
+    // var minDate = dateDim.bottom(1)[0].TimeStamp;
+    // var maxDate = dateDim.top(1)[0].TimeStamp;
     var fatalities = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
@@ -537,7 +538,8 @@ dc.renderAll("chart")
         .group(incidents, "incidents")
         .stack(fatalities, "fatalities")
         .renderArea(true)
-        .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
+        // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
+        .x(d3.time.scale())
         .elasticX(true)
         .brushOn(true)
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
@@ -558,8 +560,8 @@ dc.renderAll("chart")
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
-    var minDate = dateDim.bottom(1)[0].date;
-    var maxDate = dateDim.top(1)[0].date;
+    // var minDate = dateDim.bottom(1)[0].date;
+    // var maxDate = dateDim.top(1)[0].date;
 
 
     var volumeChart = dc.barChart("#dc-line-chart", "map");
@@ -579,7 +581,8 @@ dc.renderAll("chart")
         .group(month_total)
         // .centerBar(true)
         .gap(2)
-        .x(d3.time.scale().domain([minDate, maxDate]))
+        // .x(d3.time.scale().domain([minDate, maxDate]))
+        .x(d3.time.scale())
         .round(d3.time.months)
         .xUnits(d3.time.months)
         // .xUnits(function (d) {

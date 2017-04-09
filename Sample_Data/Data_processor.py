@@ -79,13 +79,13 @@ county_map = pd.Series(FIPS_data.County.values,
 
 data['STATE'] = data['STATE'].apply(fix_length)
 data['COUNTY'] = data['COUNTY'].apply(fix_length_state)
-data['STATE'] = data['STATE'].map(state_map)
+data['STATE_ABBR'] = data['STATE'].map(state_map)
 
 data['State_County'] = data['STATE'] + data['COUNTY']
 
 
 def fix_county(row):
-    FIPS_data_state = FIPS_data[FIPS_data['State'] == row['STATE']]
+    FIPS_data_state = FIPS_data[FIPS_data['State'] == row['STATE_ABBR']]
     # FIPS_data_state['County'][FIPS_data_state['FIPS_County'] == row['COUNTY']].values
     # if(len(FIPS_data_state[FIPS_data_state['FIPS_County'] ==
     # row['COUNTY']]['County']) != 1):
@@ -96,13 +96,20 @@ def fix_county(row):
     # print(row['COUNTY'])
 
 
+data['GEO_ID'] = "0500000US" + data['STATE'] + data['COUNTY']
+
+
 data = data[data['COUNTY'] != '000']
 
+
 print(len(pd.unique(data['COUNTY'] + data['STATE'])))
 
 
-data['COUNTY'] = data.apply(fix_county, axis=1)
+data['COUNTY_NAME'] = data.apply(fix_county, axis=1)
 print(len(pd.unique(data['COUNTY'] + data['STATE'])))
+
+
+# print(data)
 
 
 # for row in FIPS_data.itertuples():

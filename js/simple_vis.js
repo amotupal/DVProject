@@ -448,6 +448,9 @@ d3.csv(path, (error, csv) => {
     countyGroup = counties.group();
 
     countyRaisedCount = countyGroup.reduceCount();
+    counties.filterFunction(function(d){
+        return d > 0
+    })
     countyCounts = countyRaisedCount.all()
     print_filter(countyRaisedCount)
     countyRaisedFatalities = countyGroup.reduceSum(function (d) {
@@ -474,7 +477,7 @@ d3.csv(path, (error, csv) => {
     // var bottom_county = orderedcountyGroup[50].value / population_map[orderedcountyGroup[50].key];
 
     var countyChart = dc.geoChoroplethChart("#dc-map-counties", "chart");
-
+    console.log(countyJson[state])
     countyChart.width(1460)
         .height(1000)
         .dimension(counties)
@@ -487,7 +490,7 @@ d3.csv(path, (error, csv) => {
         // })
         .overlayGeoJson(countyJson[state], "county", function (d) {
             console.log(d);
-            return [d.features.properties.state, d.features.counties.name];
+            return d.features.counties.name;
         })
         .valueAccessor(function (kv) {
             // console.log("kv: ",kv);

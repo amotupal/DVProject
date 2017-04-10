@@ -272,7 +272,7 @@ for (propertyName in full_states) {
     
     // console.log(readGeoJSon(propertyName))
 }
-var usCountiesJsonPath = "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/gz_2010_us_050_00_20m.json"
+var usCountiesJsonPath = "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/AZ.json"
 
 d3.json(usCountiesJsonPath, (_usCounties) => {
     usCounties = _usCounties;

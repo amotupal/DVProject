@@ -1,6 +1,6 @@
 var chart = d3.parsets()
-    .dimensions(["Survived", "Sex", "Age", "Class"])
-    .width(1000).height(600)
+    .dimensions(["AccidentType", "Sex", "AgeClass", "AgeGroup"])
+    .width(750).height(450)
     .duration(3000);
 
 var vis = d3.select("#dc-parallel-graph").append("svg")
@@ -17,7 +17,7 @@ var das,root1,csv1;
 var local_path_titanic = "data/titanic.csv";
 var github_path_titanic = "https://raw.githubusercontent.com/amotupal/DVProject/master/Data/titanic.csv";
 
-d3.csv(github_path_titanic, function(error, csv) {
+d3.csv(local_path_titanic, function(error, csv) {
     vis.datum(csv).call(chart);
     var newIce = this.checked,
         tension = chart.tension();

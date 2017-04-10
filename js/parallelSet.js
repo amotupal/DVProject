@@ -17,7 +17,7 @@ var das,root1,csv1;
 var local_path_titanic = "data/titanic.csv";
 var github_path_titanic = "https://raw.githubusercontent.com/amotupal/DVProject/master/Data/titanic.csv";
 
-d3.csv(local_path_titanic, function(error, csv) {
+d3.csv(github_path_titanic, function(error, csv) {
     vis.datum(csv).call(chart);
     var newIce = this.checked,
         tension = chart.tension();

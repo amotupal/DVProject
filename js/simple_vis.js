@@ -378,8 +378,8 @@ d3.json("Data/us_states.json", function (statesJson) {
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
 var chart = d3.parsets()
       //.dimensions(["US Work Eligible","Work Status","Language","English Class","Gender"]);
-      .dimensions(["FATALS","HIT_RUN","SCH_BUS"])
-      .width(900).height(450);
+      .dimensions(["FATALS","HIT_RUN","DRUNK_DR"])
+      .width(750).height(600);
 //     .duration(3000);
 var vis = d3.select("#dc-parallel-graph").append("svg")
     .attr("width", chart.width())
@@ -688,8 +688,8 @@ console.log("in here sseeee:  ",chkboxName.id)
      }
   }
   console.log("Axes: ",checkboxesChecked);
-  chart.dimensions(checkboxesChecked);
-  vis.call(chart);
+//   chart.dimensions(checkboxesChecked);
+//   vis.call(chart);
   //console.log(checkboxesChecked);// Return the array if it is non-empty, or null
   //return checkboxesChecked.length > 0 ? checkboxesChecked : null;
 }

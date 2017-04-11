@@ -294,26 +294,6 @@ data.forEach(function (d) {
     d.Day = d.date.getDay() + 1;
 });
 /************
-Year Ring
-*************/
-var yearRingChart = dc.pieChart("#dc-yr-pie-graph", "chart");
-var yearDim = ndx.dimension(function (d) {
-    return +d.Year;
-});
-// print_filter("yearDim");
-var year_total = yearDim.group().reduceSum(function (d) {
-    return d.hits;
-});
-yearRingChart
-    .width(180).height(180)
-    .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
-    .dimension(yearDim)
-    .group(year_total)
-    .innerRadius(45)
-    .renderLabel(false)
-    .renderTitle(false)
-    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
-/************
 Status Ring
 *************/
 var statusRingChart = dc.pieChart("#dc-sts-pie-graph", "chart");
@@ -350,7 +330,7 @@ $('#dc-yr-pie-graph').on('click', function () {
     volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
     volumeChart.redraw();
 });
-
+//var temp;
 var demo;
 var states;
 var stateRaisedCount;
@@ -378,8 +358,8 @@ d3.json("Data/us_states.json", function (statesJson) {
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
 var chart = d3.parsets()
       //.dimensions(["US Work Eligible","Work Status","Language","English Class","Gender"]);
-      .dimensions(["FATALS","HIT_RUN","DRUNK_DR"])
-      .width(750).height(600);
+      .dimensions(["FATALS","PEDS","HIT_RUN","DRUNK_DR"])
+      .width(750).height(450);
 //     .duration(3000);
 var vis = d3.select("#dc-parallel-graph").append("svg")
     .attr("width", chart.width())
@@ -391,15 +371,29 @@ var vis = d3.select("#dc-parallel-graph").append("svg")
 // });
 var local_path = "../Sample_Data/accident_new.csv"
 var dataSet;
+
+var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+    
+    // data.forEach(function (d) {
+    //     console.log("ts: ",d.date);
+    //     d.date = parseDate1(d.date);
+    //     console.log("after: ",d.date)
+    //     d.Year = d.date.getFullYear();
+    //     console.log("after: ",d.Year)
+    //     d.Day = d.date.getDay() + 1;
+    // });
+    
 d3.csv(path, (error, csv) => {
     vis.datum(csv).call(chart);
     dataSet = csv;
     csv.forEach((item) => {
         // console.log(item);
+        item.Year = parseDate1(item.TimeStamp).getFullYear()
+        //console.log("Year: ",parseDate1(item.TimeStamp).getFullYear())
+        //temp = item.TimeStamp;
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
-
-        // console.log(item.TimeStamp);
+        //console.log(item);
     });
 
     // var nested_data = d3.nest()
@@ -559,6 +553,27 @@ d3.csv(path, (error, csv) => {
         // volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
         // volumeChart.redraw();
     });
+
+    /************
+    Year Ring
+    *************/
+    var yearRingChart = dc.pieChart("#dc-yr-pie-graph", "map");
+    var accYearDim = accident_facts.dimension(function (d) {
+        return +d.Year;
+    });
+    // print_filter("yearDim");
+    var acc_year_total = accYearDim.group().reduceCount(function (d) {
+        return d.Year;
+    });
+    yearRingChart
+        .width(180).height(180)
+        .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
+        .dimension(accYearDim)
+        .group(acc_year_total)
+        .innerRadius(45)
+        .renderLabel(false)
+        .renderTitle(false)
+        .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
     /************
     Stacked Area Chart
     *************/

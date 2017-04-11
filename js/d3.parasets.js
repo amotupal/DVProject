@@ -28,6 +28,7 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY ;OF SUCH DAMAGE.*/
 var SCH_BUS=["A","B","C","D"];
+var list={};
 (function() {
   d3.parsets = function() {
     var event = d3.dispatch("sortDimensions", "sortCategories"),
@@ -676,12 +677,18 @@ var SCH_BUS=["A","B","C","D"];
   function translateY(d) { return "translate(0," + d.y + ")"; }
 
   function defaultTooltip(d) {
+    list[d.dimension]=d.name;
     var count = d.count,
         path = [];
     var parentcount = d.parent.count;
     while (d.parent) {
-      if (d.name) path.unshift(d.name);
-      d = d.parent;
+      if (d.name){
+        if(d.parent.dimension !== undefined){
+          list[d.parent.dimension] = d.parent.name;
+        }
+        path.unshift(d.name);
+        d = d.parent;
+      } 
     }
     var pathlast =  path.pop();
     return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";

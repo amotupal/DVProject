@@ -1,5 +1,33 @@
 // Parallel Sets by Jason Davies, http://www.jasondavies.com/
 // Functionality based on http://eagereyes.org/parallel-sets
+
+/*Copyright (c) 2012, Jason Davies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+  * The name Jason Davies may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL JASON DAVIES BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY ;OF SUCH DAMAGE.*/
+var SCH_BUS=["A","B","C","D"];
 (function() {
   d3.parsets = function() {
     var event = d3.dispatch("sortDimensions", "sortCategories"),
@@ -122,12 +150,12 @@
           textEnter.append("tspan")
               .attr("class", "sort alpha")
               .attr("dx", "2em")
-              .text("alpha Â»")
+              .text("alpha »")
               .on("mousedown.parsets", cancelEvent);
           textEnter.append("tspan")
               .attr("class", "sort size")
               .attr("dx", "2em")
-              .text("size Â»")
+              .text("size »")
               .on("mousedown.parsets", cancelEvent);
           dimension
               .call(d3.behavior.drag()
@@ -189,7 +217,7 @@
         function sortBy(type, f, dimension) {
           return function(d) {
             var direction = this.__direction = -(this.__direction || 1);
-            d3.select(this).text(direction > 0 ? type + " Â»" : "Â« " + type);
+            d3.select(this).text(direction > 0 ? type + " »" : "« " + type);
             d.categories.sort(function() { return direction * f.apply(this, arguments); });
             nodes = layout(tree, dimensions, ordinal);
             updateCategories(dimension);
@@ -355,7 +383,7 @@
           category.select("line")
               .attr("x2", function(d) { return d.dx; });
           category.select("text")
-              .text(truncateText(function(d) { return d.name; }, function(d) { return d.dx; }));
+              .text(truncateText(function(d) { return SCH_BUS[d.name]; }, function(d) { return d.dx; }));
         }
       });
     }
@@ -410,7 +438,7 @@
 
     parsets.tooltip = function(_) {
       if (!arguments.length) return tooltip;
-      tooltip = _ == null ? defaultTooltip : _;
+      tooltip_ = _ == null ? defaultTooltip : _;
       return parsets;
     };
 
@@ -589,7 +617,7 @@
       var t = this.textContent = text(d, i),
           w = width(d, i);
       if (this.getComputedTextLength() < w) return t;
-      this.textContent = "â€¦" + t;
+      this.textContent = "¦" + t;
       var lo = 0,
           hi = t.length + 1,
           x;
@@ -598,7 +626,7 @@
         if ((x = this.getSubStringLength(0, mid)) < w) lo = mid + 1;
         else hi = mid;
       }
-      return lo > 1 ? t.substr(0, lo - 2) + "â€¦" : "";
+      return lo > 1 ? t.substr(0, lo - 2) + "¦" : "";
     };
   }
 
@@ -615,7 +643,7 @@
         nd = dimensions.length;
     for (var i = 0; i < n; i++) {
       var d = data[i],
-          v = value(d, i),
+          v = +value(d, i),
           node = root;
       for (var j = 0; j < nd; j++) {
         var dimension = dimensions[j],
@@ -650,11 +678,13 @@
   function defaultTooltip(d) {
     var count = d.count,
         path = [];
+    var parentcount = d.parent.count;
     while (d.parent) {
       if (d.name) path.unshift(d.name);
       d = d.parent;
     }
-    return path.join(" â†’ ") + "<br>" + comma(count) + " (" + percent(count / d.count) + ")";
+    var pathlast =  path.pop();
+    return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";
   }
 
   function defaultCategoryTooltip(d) {

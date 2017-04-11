@@ -376,19 +376,55 @@ d3.json("Data/us_states.json", function (statesJson) {
 });
 
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
+var chart = d3.parsets()
+      //.dimensions(["US Work Eligible","Work Status","Language","English Class","Gender"]);
+      .dimensions(["FATALS","HIT_RUN","SCH_BUS"])
+      .width(900).height(450);
+//     .duration(3000);
+var vis = d3.select("#dc-parallel-graph").append("svg")
+    .attr("width", chart.width())
+    .attr("height", chart.height());
 
+// d3.csv("https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv", function(csv) {
+//     //console.log("what:::",csv)
+//   vis.datum(csv).call(chart);
+// });
 var local_path = "../Sample_Data/accident_new.csv"
-
+var dataSet;
 d3.csv(path, (error, csv) => {
-
+    vis.datum(csv).call(chart);
+    dataSet = csv;
     csv.forEach((item) => {
         // console.log(item);
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
 
         // console.log(item.TimeStamp);
-
     });
+
+    // var nested_data = d3.nest()
+    // .key(function(d) { return d.STATE_ABBR}).sortKeys(d3.ascending)
+    // .rollup(function(v) { return d3.sum(v, function(d) { return d.HIT_RUN + d.SCH_BUS; }); })
+    // .entries(csv);
+
+    // var list = d3.select("#featSlect")
+
+    // list.selectAll("option")
+    //     .data(nested_data)
+    //     .enter()
+    //     .append("option")
+    //     .attr("value", function(d) {return d.key;})
+    //     .text(function(d) {
+    //     return d.key; });
+
+
+    var expenseMetrics = d3.nest()
+        .key(function(d) { return d.STATE_ABBR; })
+        .rollup(function(v) { return d3.sum(v, function(d) { return d.HIT_RUN + d.SCH_BUS; }); })
+        .map(csv);
+    
+    // console.log("expenseMetrics: ",JSON.stringify(expenseMetrics));
+
     // console.log(csv)
     // console.log(typeof csv.TimeStamp)
     accident_facts = crossfilter(csv);
@@ -412,7 +448,7 @@ d3.csv(path, (error, csv) => {
     var bottom_state = d3.min(statevalues)
 
     // console.log(top_state, bottom_state)
-    print_filter(stateRaisedCount)
+    // print_filter(stateRaisedCount)
     // orderedStateGroup = stateGroup.top(51)
     // var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
@@ -454,7 +490,7 @@ d3.csv(path, (error, csv) => {
     //     return d.COUNTY;
     // });
     // countyGroup = counties.group();
-
+    
     // countyRaisedCount = countyGroup.reduceCount();
     // // counties.filterFunction(function(d,k){
     // //     // console.log(d, k)
@@ -538,6 +574,7 @@ d3.csv(path, (error, csv) => {
         return d.FATALS;
     });
     // console.log("minDate: ", minDate, ", maxDate: ", maxDate);
+    var dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     stackedAreaChart
         .width(1000).height(400)
         .dimension(dateDim)
@@ -549,9 +586,10 @@ d3.csv(path, (error, csv) => {
         // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
         .x(d3.time.scale())
         .elasticX(true)
+        .elasticY(true)
         .brushOn(true)
         .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-        .yAxisLabel("per day")
+        .yAxisLabel("Per Day")
         .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
         .title(function (d) {
             // console.log(d);
@@ -634,4 +672,24 @@ function print_filter(filter) {
         }).top(Infinity);
     } else {}
     console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
+}
+
+function getCheckedBoxes(chkboxName) {
+console.log("in here sseeee:  ",chkboxName.id)
+  var checkboxes = document.getElementById(chkboxName.id);
+  var checkboxesChecked = [];
+  // loop over them all
+  console.log("checkboxes",checkboxes)
+  //console.log("@2", checkboxes.selectedIndex)
+  for (var i=0; i<checkboxes.length; i++) {
+     // And stick the checked ones onto an array...
+     if (checkboxes[i].selected) {
+        checkboxesChecked.push(checkboxes[i].value);
+     }
+  }
+  console.log("Axes: ",checkboxesChecked);
+  chart.dimensions(checkboxesChecked);
+  vis.call(chart);
+  //console.log(checkboxesChecked);// Return the array if it is non-empty, or null
+  //return checkboxesChecked.length > 0 ? checkboxesChecked : null;
 }

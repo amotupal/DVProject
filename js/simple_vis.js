@@ -318,14 +318,14 @@ dc.renderAll("chart");
 
 
 
-$('#dc-yr-pie-graph').on('click', function () {
+// $('#dc-yr-pie-graph').on('click', function () {
 
-    var minDate2 = dateDim.bottom(1)[0].date;
-    var maxDate2 = dateDim.top(1)[0].date;
-    // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
-    volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
-    volumeChart.redraw();
-});
+//     var minDate2 = dateDim.bottom(1)[0].date;
+//     var maxDate2 = dateDim.top(1)[0].date;
+//     // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
+//     volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
+//     volumeChart.redraw();
+// });
 //var temp;
 var demo;
 var states;
@@ -370,16 +370,8 @@ var dataSet;
 
 var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     
-    // data.forEach(function (d) {
-    //     console.log("ts: ",d.date);
-    //     d.date = parseDate1(d.date);
-    //     console.log("after: ",d.date)
-    //     d.Year = d.date.getFullYear();
-    //     console.log("after: ",d.Year)
-    //     d.Day = d.date.getDay() + 1;
-    // });
-    
 d3.csv(path, (error, csv) => {
+    //chart.dimension(["FATALS","PEDS","HIT_RUN"])
     vis.datum(csv).call(chart);
     dataSet = csv;
     csv.forEach((item) => {
@@ -436,15 +428,12 @@ d3.csv(path, (error, csv) => {
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
 
-<<<<<<< Updated upstream
     // console.log(top_state, bottom_state)
     // print_filter(stateRaisedCount)
     // orderedStateGroup = stateGroup.top(51)
     // var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
     // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
-=======
     console.log(top_state, bottom_state)
->>>>>>> Stashed changes
 
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
     // var scale = Math.min(960 * 1.2, 500 * 2.1);
@@ -475,8 +464,6 @@ d3.csv(path, (error, csv) => {
         });
 
 
-
-<<<<<<< Updated upstream
     // var state = 'AZ';
     // // states.filterExact(state);
     // counties = accident_facts.dimension(function (d) {
@@ -541,8 +528,6 @@ d3.csv(path, (error, csv) => {
     //     });
 
 // dc.renderAll("chart")
-=======
->>>>>>> Stashed changes
 
     counties = accident_facts.dimension(function (d) {
         return d.GEO_ID;
@@ -573,11 +558,6 @@ d3.csv(path, (error, csv) => {
     // var scale = Math.min(960 * 1.2, 500 * 2.1);
     var width = 560;
     var height = 500;
-
-
-
-
-
 
     dc.renderAll("counties_chart")
     var previous;
@@ -766,22 +746,22 @@ function print_filter(filter) {
     console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
 }
 
-function getCheckedBoxes(chkboxName) {
-console.log("in here sseeee:  ",chkboxName.id)
-  var checkboxes = document.getElementById(chkboxName.id);
-  var checkboxesChecked = [];
-  // loop over them all
-  console.log("checkboxes",checkboxes)
-  //console.log("@2", checkboxes.selectedIndex)
-  for (var i=0; i<checkboxes.length; i++) {
-     // And stick the checked ones onto an array...
-     if (checkboxes[i].selected) {
-        checkboxesChecked.push(checkboxes[i].value);
-     }
-  }
-  console.log("Axes: ",checkboxesChecked);
-//   chart.dimensions(checkboxesChecked);
-//   vis.call(chart);
-  //console.log(checkboxesChecked);// Return the array if it is non-empty, or null
-  //return checkboxesChecked.length > 0 ? checkboxesChecked : null;
-}
+// function getCheckedBoxes(chkboxName) {
+// console.log("in here sseeee:  ",chkboxName.id)
+//   var checkboxes = document.getElementById(chkboxName.id);
+//   var checkboxesChecked = [];
+//   // loop over them all
+//   console.log("checkboxes",checkboxes)
+//   //console.log("@2", checkboxes.selectedIndex)
+//   for (var i=0; i<checkboxes.length; i++) {
+//      // And stick the checked ones onto an array...
+//      if (checkboxes[i].selected) {
+//         checkboxesChecked.push(checkboxes[i].value);
+//      }
+//   }
+//   console.log("Axes: ",checkboxesChecked);
+// //   chart.dimensions(checkboxesChecked);
+// //   vis.call(chart);
+//   //console.log(checkboxesChecked);// Return the array if it is non-empty, or null
+//   //return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+// }

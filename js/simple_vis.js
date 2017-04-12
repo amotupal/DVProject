@@ -662,7 +662,7 @@ d3.csv(path, (error, csv) => {
         return p;
     }
     function reduceRemove(p,v){
-        p[v.STATE]=(p[v.STATE]||0)+1;
+        p[v.STATE]=(p[v.STATE]||0)-1;
         return p;
     }
     function reduceInitial(){
@@ -774,35 +774,35 @@ d3.csv(path, (error, csv) => {
 
     var monthOfTheYearDim = accident_facts.dimension(function(d) { return [+d.Month, +d.Year]; });
 
-    var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduceSum(function (d) {
-        return +d.FATALS;
-    });
+    // var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduceSum(function (d) {
+    //     return +d.FATALS;
+    // });
 
-    // var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduce(heatMapAdd, heatMapDel, heatMapInit);
-    // /* callback for when data is added to the current filter results */
-    // function heatMapAdd(p, v) {
+    var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduce(heatMapAdd, heatMapDel, heatMapInit);
+    /* callback for when data is added to the current filter results */
+    function heatMapAdd(p, v) {
 
-    //     console.log("p add: ",p)
-    //     //++p.count;
-    //     p.FATALS += v.FATALS;
-    //     p.PERSONS += v.PERSONS;
-    //     p.HIT_RUN += v.HIT_RUN;
-    //     return p;
-    // }
-    // /* callback for when data is removed from the current filter results */
-    // function heatMapDel(p, v) {
+        console.log("p add: ",p)
+        //++p.count;
+        p.FATALS += v.FATALS;
+        p.PERSONS += v.PERSONS;
+        p.HIT_RUN += v.HIT_RUN;
+        return p;
+    }
+    /* callback for when data is removed from the current filter results */
+    function heatMapDel(p, v) {
 
-    //     console.log("p del: ",p)
-    //     //--p.count;
-    //     p.FATALS -= v.FATALS;
-    //     p.PERSONS -= v.PERSONS;
-    //     p.HIT_RUN -= v.HIT_RUN;
-    //     return p;
-    // }
-    // /* initialize p */
-    // function heatMapInit() {
-    //     return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
-    // }
+        console.log("p del: ",p)
+        //--p.count;
+        p.FATALS -= v.FATALS;
+        p.PERSONS -= v.PERSONS;
+        p.HIT_RUN -= v.HIT_RUN;
+        return p;
+    }
+    /* initialize p */
+    function heatMapInit() {
+        return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
+    }
 
     testDim = statsByMonthOfYearGroup;
     print_filter("testDim");
@@ -821,11 +821,11 @@ d3.csv(path, (error, csv) => {
             .group(statsByMonthOfYearGroup)
             .keyAccessor(function(d) { console.log(d); return +d.key[0]; })
             .valueAccessor(function(d) { return +d.key[1]; })
-            .colorAccessor(function(d) { return +d.value; })
+            .colorAccessor(function(d) { return +d.value.FATALS; })
             .title(function(d) {
                 return " Month:   " + d.key[0] + "\n" +
                        " Year:   " + d.key[1] + "\n" +
-                       " Fatalities:   " + d.value;})
+                       " Fatalities:   " + d.value.FATALS;})
             // .ordinalColors(color_sheme);
             .colors(heatColorMapping);
     heatMapChart.xBorderRadius(1);

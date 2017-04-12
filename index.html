@@ -42,7 +42,7 @@
                             <span class = "dropdown">
                                 <select id="multicheckbox" multiple="multiple">
                                     <option value="FATALS" selected>Fatals</option>
-                                    <option value="SCH_BUS">SchoolBus</option>
+                                    <option value="SCH_BUS" selected>SchoolBus</option>
                                     <option value="HIT_RUN">Hit&Run</option>
                                     <option value="DRUNK_DR">Drunk Driver</option></select>
                             </span>
@@ -99,21 +99,12 @@
     <script src='js/simple_vis.js' type='text/javascript'></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            var checkboxes = document.getElementById('multicheckbox');
-            var checkboxesChecked = [];
-            for (var i=0; i<checkboxes.length; i++) {
-                if (checkboxes[i].selected) {
-                    checkboxesChecked.push(checkboxes[i].value);
-                }
-            }
-            $('#parallelSets').remove();
-            drawParallelStes(checkboxesChecked, path);
             $('#multicheckbox').multiselect(); 
             $('#multicheckbox1').multiselect();  
             $('#multicheckbox2').multiselect();   
             $('.dropdown').on('hidden.bs.dropdown', function(event){
-                checkboxes = document.getElementById('multicheckbox');
-                heckboxesChecked = [];
+                var checkboxes = document.getElementById('multicheckbox');
+                var checkboxesChecked = [];
                 for (var i=0; i<checkboxes.length; i++) {
                     if (checkboxes[i].selected) {
                         checkboxesChecked.push(checkboxes[i].value);

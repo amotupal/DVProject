@@ -99,12 +99,21 @@
     <script src='js/simple_vis.js' type='text/javascript'></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            var checkboxes = document.getElementById('multicheckbox');
+            var checkboxesChecked = [];
+            for (var i=0; i<checkboxes.length; i++) {
+                if (checkboxes[i].selected) {
+                    checkboxesChecked.push(checkboxes[i].value);
+                }
+            }
+            $('#parallelSets').remove();
+            drawParallelStes(checkboxesChecked, path);
             $('#multicheckbox').multiselect(); 
             $('#multicheckbox1').multiselect();  
             $('#multicheckbox2').multiselect();   
             $('.dropdown').on('hidden.bs.dropdown', function(event){
-                var checkboxes = document.getElementById('multicheckbox');
-                var checkboxesChecked = [];
+                checkboxes = document.getElementById('multicheckbox');
+                heckboxesChecked = [];
                 for (var i=0; i<checkboxes.length; i++) {
                     if (checkboxes[i].selected) {
                         checkboxesChecked.push(checkboxes[i].value);

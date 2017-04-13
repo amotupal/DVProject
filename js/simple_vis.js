@@ -356,7 +356,7 @@ d3.json("Data/us_states.json", function (statesJson) {
 });
 
 var dimValues = ["FATALS", "PEDS", "HIT_RUN", "DRUNK_DR"]
-var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
+var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_all.csv"
 
 
 // d3.csv("https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv", function(csv) {

@@ -363,7 +363,7 @@ var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_D
 //     //console.log("what:::",csv)
 //   vis.datum(csv).call(chart);
 // });
-var local_path = "../Sample_Data/accident_new.csv"
+var local_path = "../Sample_Data/accident_all.csv"
 var dataSet;
 
 function drawParallelStes(dimen, path) {
@@ -642,7 +642,7 @@ d3.csv(path, (error, csv) => {
     var m = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     var stackedAreaChart = dc.lineChart("#dc-line-graph", "stacked_area");
     var dateDim = accident_facts.dimension(function (d) {
-        return d.TimeStamp.getMonth();
+        return d.TimeStamp.getFullYear();
     });
 
     function reduceAdd(p, v) {
@@ -674,7 +674,6 @@ d3.csv(path, (error, csv) => {
             return (d.value[i] || 0);
         };
     }
-    print_filter(StateSumGroup)
     stackedAreaChart
         .width(900).height(400)
         .dimension(dateDim)

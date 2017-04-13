@@ -355,7 +355,7 @@ d3.json("Data/us_states.json", function (statesJson) {
     geoJson = statesJson;
 });
 
-var dimValues = ["FATALS", "PEDS", "HIT_RUN", "DRUNK_DR"]
+//var dimValues = ["FATALS", "PEDS", "HIT_RUN", "DRUNK_DR"]
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_all.csv"
 
 
@@ -378,7 +378,7 @@ function drawParallelStes(dimen, path) {
     })
 }
 var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
-drawParallelStes(dimValues, path);
+//drawParallelStes(dimValues, path);
 
 
 var testDim;
@@ -627,15 +627,26 @@ d3.csv(path, (error, csv) => {
     var acc_year_total = accYearDim.group().reduceCount(function (d) {
         return d.Year;
     });
-    yearRingChart
-        .width(180).height(180)
-        .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
-        .dimension(accYearDim)
-        .group(acc_year_total)
-        .innerRadius(45)
-        .renderLabel(false)
-        .renderTitle(false)
-        .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+    // yearRingChart
+    //     .width(180).height(180)
+    //     .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
+    //     .dimension(accYearDim)
+    //     .group(acc_year_total)
+    //     .innerRadius(45)
+    //     .renderLabel(false)
+    //     .renderTitle(false)
+    //     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+
+
+yearRingChart
+    .width(260)
+    .height(220)
+    .externalLabels(25)
+    .externalRadiusPadding(30)
+    .drawPaths(true)
+    .dimension(accYearDim)
+    .group(acc_year_total)
+    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
     /************
     Stacked Area Chart
     *************/
@@ -700,11 +711,14 @@ d3.csv(path, (error, csv) => {
             left: 50,
             right: 10,
             bottom: 50
-        })
+        });
+    
+    stackedAreaChart.xAxis().ticks(0);
     // for (var i = 2; i < 16; ++i) {
     //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
     // }
     dc.renderAll('stacked_area')
+
     
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
@@ -742,7 +756,7 @@ d3.csv(path, (error, csv) => {
         .elasticX(true);
     // .yAxis().ticks(4);
 
-    volumeChart.xAxis().ticks(11).tickValues();
+    volumeChart.xAxis().ticks(0);
 
     function getvalues(d) {
         var str = d.key.getDate() + "/" + (d.key.getMonth() + 1) + "/" + d.key.getFullYear() + "\n";
@@ -811,7 +825,7 @@ d3.csv(path, (error, csv) => {
 
     heatMapChart
         .width(900)
-        .height(50)
+        .height(200)
         .dimension(monthOfTheYearDim)
         .group(statsByMonthOfYearGroup)
         .keyAccessor(function (d) {
@@ -827,6 +841,12 @@ d3.csv(path, (error, csv) => {
             return " Month:   " + d.key[0] + "\n" +
                 " Year:   " + d.key[1] + "\n" +
                 " Fatalities:   " + d.value.FATALS;
+        })
+        .margins({
+            top: 5,
+            left: 50,
+            right: 20,
+            bottom: 15
         })
         // .ordinalColors(color_sheme);
         .colors(heatColorMapping);

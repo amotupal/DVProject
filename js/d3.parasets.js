@@ -27,7 +27,33 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY ;OF SUCH DAMAGE.*/
-var SCH_BUS=["A","B","C","D"];
+var SCH_BUS={
+"0":"Not Involved",
+"1":"Involved",
+"8":"Unknown"
+};
+var MAN_COLL={
+"1":"Front",
+"2":"Rear",
+"3":"Angle",
+"4":"Random"
+};
+var HIT_RUN = {
+  "0":"",
+  "1":"",
+  "2":"",
+  "3":"",
+  "4":""
+  "5":""
+};
+
+var WEATHER={
+"1":"Normal",
+"2":"Rain",
+"3":"Snow",
+"4":"Fog",
+"5":"Winds"
+};
 var list={};
 (function() {
   d3.parsets = function() {
@@ -384,7 +410,7 @@ var list={};
           category.select("line")
               .attr("x2", function(d) { return d.dx; });
           category.select("text")
-              .text(truncateText(function(d) { return SCH_BUS[d.name]; }, function(d) { return d.dx; }));
+              .text(truncateText(function(d) { console.log(d);return SCH_BUS[d.name]; }, function(d) { return d.dx; }));
         }
       });
     }
@@ -691,10 +717,18 @@ var list={};
       } 
     }
     var pathlast =  path.pop();
-    return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";
+    return path.join(" &rarr; ") + "<br>" + comma(count) + " (" + percent(count / d.count) + ")";
+    //return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";
   }
 
   function defaultCategoryTooltip(d) {
+    console.log("default:  ",d.dimension.name)
+    var str;
+    if(window[d.dimenison.name] !== undefined){
+      str = window[d.dimenison.name][d.name];
+    }else{
+      str = d.name;
+    }
     return d.name + "<br>" + comma(d.count) + " (" + percent(d.count / d.dimension.count) + ")";
   }
 })();

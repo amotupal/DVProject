@@ -386,7 +386,8 @@ d3.csv(path, (error, csv) => {
     dataSet = csv;
     csv.forEach((item) => {
         item.Year = parseDate1(item.TimeStamp).getFullYear();
-        item.Month = parseDate1(item.TimeStamp).getMonth();
+        item.Month = parseDate1(item.TimeStamp).getMonth()+1;
+        item.Day = parseDate1(item.TimeStamp).getDay()+1;
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
         item.FATALS = +item.FATALS;
@@ -719,43 +720,83 @@ d3.csv(path, (error, csv) => {
         };
     }
 
-    testDim = statsByMonthOfYearGroup;
+    // testDim = statsByMonthOfYearGroup;
     // print_filter("testDim");
 
     //testDim = monthOfTheYearDim;
-    var heatMapChart = dc.heatMap("#dc-heat-map", "map");
+    var heatMapChart = dc.heatMap("#dc-heat-map-tot","map");
 
     var heatColorMapping = d3.scale.linear()
         .domain([2500, 3200, 4000])
         .range(["green", "orange", "red"]);
 
     heatMapChart
-        .width(900)
-        .height(50)
-        .dimension(monthOfTheYearDim)
-        .group(statsByMonthOfYearGroup)
-        .keyAccessor(function (d) {
-            // console.log(d); 
-            return +d.key[0];
-        })
-        .valueAccessor(function (d) {
-            return +d.key[1];
-        })
-        .colorAccessor(function (d) {
-            return +d.value.FATALS;
-        })
-        .title(function (d) {
-            return " Month:   " + d.key[0] + "\n" +
-                " Year:   " + d.key[1] + "\n" +
-                " Fatalities:   " + d.value.FATALS;
-        })
-        // .ordinalColors(color_sheme);
-        .colors(heatColorMapping);
+            .width(900)
+            .height(50)
+            .dimension(monthOfTheYearDim)
+            .group(statsByMonthOfYearGroup)
+            .keyAccessor(function(d) { return +d.key[0]; })
+            .valueAccessor(function(d) { return +d.key[1]; })
+            .colorAccessor(function(d) { return +d.value.FATALS; })
+            .title(function(d) {
+                return " Month:   " + d.key[0] + "\n" +
+                       " Year:   " + d.key[1] + "\n" +
+                       " Fatalities:   " + d.value.FATALS;})
+            // .ordinalColors(color_sheme);
+            .colors(heatColorMapping);
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
-    heatMapChart.render();
 
+    //  $('#dc-heat-map-tot').on('click', function (d) {
+    //     var selected = heatMapChart.filters()
+    //     console.log("selected" ,selected)
+    //     var selectStr = ""+selected[0][0]+""+selected[0][1]
 
+    //     var dayOfTheMonthDim = accident_facts.dimension(function(d) { return [d.Day, d.Month, d.Year] });
+    //     dayOfTheMonthDim.filter(function(d){ 
+    //         // console.log("filter d: ",d[1]," " ,d[2],":::",selected[0][0]," ",selected[0][1])
+    //         return d[1]+""+d[2] === selectStr;
+    //     })
+    //     var statsByDayOfMonthGroup = dayOfTheMonthDim.group().reduce(heatMap1Add, heatMap1Del, heatMap1Init);
+    //     function heatMap1Add(p, v) {
+    //         p.FATALS += v.FATALS;
+    //         p.PERSONS += v.PERSONS;
+    //         p.HIT_RUN += v.HIT_RUN;
+    //         return p;
+    //     }
+    //     function heatMap1Del(p, v) {
+    //         p.FATALS -= v.FATALS;
+    //         p.PERSONS -= v.PERSONS;
+    //         p.HIT_RUN -= v.HIT_RUN;
+    //         return p;
+    //     }
+    //     function heatMap1Init() {
+    //         return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
+    //     }
+
+        
+    //     testDim = statsByDayOfMonthGroup
+    //     print_filter("testDim")
+
+    //     var yearlyHeatMapChart = dc.heatMap("#dc-heat-map-yearly","map");
+    
+    //     yearlyHeatMapChart
+    //             .width(900)
+    //             .height(50)
+    //             .dimension(dayOfTheMonthDim)
+    //             .group(statsByMonthOfYearGroup)
+    //             .keyAccessor(function(d) { console.log(d); return +d.key[0]%7 + 1; })
+    //             .valueAccessor(function(d) { return +d.key[1]; })
+    //             .colorAccessor(function(d) { return +d.value.FATALS; })
+    //             .title(function(d) {
+    //                 return " Month:   " + d.key[0] + "\n" +
+    //                     " Year:   " + d.key[1] + "\n" +
+    //                     " Fatalities:   " + d.value.FATALS;})
+    //             // .ordinalColors(color_sheme);
+    //             .colors(heatColorMapping);
+    //     yearlyHeatMapChart.xBorderRadius(1);
+    //     yearlyHeatMapChart.yBorderRadius(1);
+    //  });
     dc.renderAll("map");
 });
 

@@ -39,21 +39,21 @@ var MAN_COLL={
 "4":"Random"
 };
 var HIT_RUN = {
-  "0":"",
-  "1":"",
-  "2":"",
-  "3":"",
-  "4":""
-  "5":""
+  "0":"0",
+  "1":"1",
+  "2":"2",
+  "3":"3",
+  "4":"4",
+  "5":"5"
 };
-
 var WEATHER={
-"1":"Normal",
+"1":"Moderate",
 "2":"Rain",
 "3":"Snow",
 "4":"Fog",
 "5":"Winds"
 };
+
 var list={};
 (function() {
   d3.parsets = function() {
@@ -410,7 +410,10 @@ var list={};
           category.select("line")
               .attr("x2", function(d) { return d.dx; });
           category.select("text")
-              .text(truncateText(function(d) { console.log(d);return SCH_BUS[d.name]; }, function(d) { return d.dx; }));
+              .text(truncateText(function(d) { 
+                return window[d.dimension.name][d.name]; 
+              }, 
+              function(d) { return d.dx; }));
         }
       });
     }
@@ -712,7 +715,13 @@ var list={};
         if(d.parent.dimension !== undefined){
           list[d.parent.dimension] = d.parent.name;
         }
-        path.unshift(d.name);
+        console.log("in here: ",d)
+        if(window[d.dimension][d.name] !== undefined){
+          path.unshift(window[d.dimension][d.name]); 
+        }else{
+          path.unshift(d.name);
+        }
+        
         d = d.parent;
       } 
     }
@@ -721,14 +730,16 @@ var list={};
     //return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";
   }
 
+var x;
   function defaultCategoryTooltip(d) {
-    console.log("default:  ",d.dimension.name)
+   //x = window[d.dimension.name];
+    //console.log("default:  ",window[d.dimension.name],"  ,,,",d.name)
     var str;
-    if(window[d.dimenison.name] !== undefined){
-      str = window[d.dimenison.name][d.name];
+    if(window[d.dimension.name][d.name] !== undefined){
+      str = window[d.dimension.name][d.name];
     }else{
       str = d.name;
     }
-    return d.name + "<br>" + comma(d.count) + " (" + percent(d.count / d.dimension.count) + ")";
+    return str + "<br>" + comma(d.count) + " (" + percent(d.count / d.dimension.count) + ")";
   }
 })();

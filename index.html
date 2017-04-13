@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FARS</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>-->
     <script src="js/d3.js" type="text/javascript"></script>
     <script src="js/d3.parasets.js" type="text/javascript"></script>
     <script src="js/crossfilter.js" type="text/javascript"></script>
@@ -40,9 +40,11 @@
                     <strong>Factor Selection: </strong>
                     <span class="dropdown">
                         <select id="multicheckbox" multiple="multiple">
-                            <option value="FATALS" selected>Fatals</option>
-                            <option value="MAN_COLL" selected>Collision Manner</option>
+                            <option value="MAN_COLL" selected>Collision Type</option>
                             <option value="WEATHER" selected> Weather</option>
+                            <option value="Gender"> Gender </option>
+                            <option value="BodyType"> Vehicle Body Type </option> 
+                            <option value="SCH_BUS">School Bus</option>
                             <option value="HIT_RUN">Hit&Run</option>
                             <option value="DRUNK_DR">Drunk Driver</option></select>
                     </span>
@@ -71,6 +73,8 @@
             </div>
             <div class='chart-graph col-sm-9' id='dc-line-graph'></div>
             <div class='chart-graph col-sm-3'>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
                 <div class='row-fluid pie-graph col-sm-12' id='dc-yr-pie-graph'></div>
                 <div class='row-fluid pie-graph col-sm-6' id='dc-sts-pie-graph'></div>
             </div>

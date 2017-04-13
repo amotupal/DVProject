@@ -179,10 +179,10 @@ scales["WV"]
 scales["VT"]
 scales["NJ"]
 var translations = {};
-translations['TX'] = [200,0];
+translations['TX'] = [200, 0];
 translations["AL"] = [];
 translations["OK"] = [];
-translations["NM"] = [300,50];
+translations["NM"] = [300, 50];
 translations["NV"] = [500, 150];
 translations["OH"] = [];
 translations["AK"] = [];
@@ -269,7 +269,7 @@ d3.json(usCountiesJsonPath, (_usCounties) => {
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 
 // var color_sheme = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026']
-var geo_color_scheme =  ['#1a9641', '#a6d96a', '#ffffbf', '#fdae61', '#d7191c']
+var geo_color_scheme = ['#1a9641', '#a6d96a', '#ffffbf', '#fdae61', '#d7191c']
 // ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
 // ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 // var ndx = crossfilter(data);
@@ -386,8 +386,8 @@ d3.csv(path, (error, csv) => {
     dataSet = csv;
     csv.forEach((item) => {
         item.Year = parseDate1(item.TimeStamp).getFullYear();
-        item.Month = parseDate1(item.TimeStamp).getMonth()+1;
-        item.Day = parseDate1(item.TimeStamp).getDay()+1;
+        item.Month = parseDate1(item.TimeStamp).getMonth() + 1;
+        item.Day = parseDate1(item.TimeStamp).getDay() + 1;
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
         item.FATALS = +item.FATALS;
@@ -445,8 +445,8 @@ d3.csv(path, (error, csv) => {
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
     var projection = d3.geo.albersUsa()
-                .scale(600)
-                .translate([250, 150]);
+        .scale(600)
+        .translate([250, 150]);
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
     usChart.width(660)
         .height(300)
@@ -492,6 +492,79 @@ d3.csv(path, (error, csv) => {
 
     $('#dc-map-chart').on('click', function (d) {
         var selected_states = usChart.filters()
+        /*
+        AREA CHART----
+        */
+        if (selected_states.length == 0) {
+            stackedAreaChart
+                .width(900).height(400)
+                .dimension(dateDim)
+                //.transitionDuration(1000)
+                // .mouseZoomable(true)
+                .group(StateSumGroup, "AZ", sel_stack('AZ'))
+                //.group(incidents, "incidents")
+                //.stack(fatalities, "fatalities")
+                .renderArea(true)
+                // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
+                .x(d3.scale.linear().domain([1, 18]))
+                .elasticX(true)
+                .elasticY(true)
+                .brushOn(true)
+                .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+                .yAxisLabel("Per Day")
+                //.ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+                .title(function (d) {
+                    // console.log(d);
+                    return getvalues(d.data);
+                })
+                .margins({
+                    top: 10,
+                    left: 50,
+                    right: 10,
+                    bottom: 50
+                })
+            // for (var i = 2; i < 16; ++i) {
+            //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
+            // }
+            dc.renderAll('stacked_area')
+        }
+        else{
+            
+        stackedAreaChart
+            .width(900).height(400)
+            .dimension(dateDim)
+            //.transitionDuration(1000)
+            // .mouseZoomable(true)
+            .group(StateSumGroup, selected_states[0], sel_stack(selected_states[0]))
+            //.group(incidents, "incidents")
+            //.stack(fatalities, "fatalities")
+            .renderArea(true)
+            // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
+            .x(d3.scale.linear().domain([1, 18]))
+            .elasticX(true)
+            .elasticY(true)
+            .brushOn(true)
+            .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+            .yAxisLabel("Per Day")
+            //.ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+            .title(function (d) {
+                // console.log(d);
+                return getvalues(d.data);
+            })
+            .margins({
+                top: 10,
+                left: 50,
+                right: 10,
+                bottom: 50
+            })
+        for (var i = 1; i < selected_states.length; ++i) {
+            stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
+        }
+        dc.renderAll('stacked_area');
+
+
+        }
+
         if (selected_states.length == 1) {
             all_counties = countyRaisedCount.all()
             var countyvalues = [];
@@ -505,7 +578,9 @@ d3.csv(path, (error, csv) => {
             var bottom_county = d3.min(countyvalues)
         }
         if (selected_states.length == 1) {
-
+            for (var i = 2; i < 16; ++i) {
+                stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
+            }
             var projection = d3.geo.albersUsa()
                 .scale(scales[selected_states[0]])
                 .translate(translations[selected_states[0]]);
@@ -531,11 +606,15 @@ d3.csv(path, (error, csv) => {
                     return "State: " + d.key + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
                 });
             dc.renderAll('counties_chart');
-            dc.renderAll('map');
+
 
         } else {
             stateChart.resetSvg();
         }
+     usChart.OnClick(d);
+     usChart.filter(selected_states);
+     stackedAreaChart.OnClick(d);
+     stateChart.OnClick(d);
     });
 
     /************
@@ -561,18 +640,18 @@ d3.csv(path, (error, csv) => {
     Stacked Area Chart
     *************/
     var m = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
+    var stackedAreaChart = dc.lineChart("#dc-line-graph", "stacked_area");
     var dateDim = accident_facts.dimension(function (d) {
         return d.TimeStamp.getMonth();
     });
 
     function reduceAdd(p, v) {
-        p[v.STATE] = (p[v.STATE] || 0) + 1;
+        p[v.STATE_ABBR] = (p[v.STATE_ABBR] || 0) + 1;
         return p;
     }
 
     function reduceRemove(p, v) {
-        p[v.STATE] = (p[v.STATE] || 0) - 1;
+        p[v.STATE_ABBR] = (p[v.STATE_ABBR] || 0) - 1;
         return p;
     }
 
@@ -591,17 +670,17 @@ d3.csv(path, (error, csv) => {
 
     function sel_stack(i) {
         return function (d) {
-            //console.log(i,": ",d.value[i])
+            // console.log(i,": ",d.value[i])
             return (d.value[i] || 0);
         };
     }
-
+    print_filter(StateSumGroup)
     stackedAreaChart
         .width(900).height(400)
         .dimension(dateDim)
         //.transitionDuration(1000)
         // .mouseZoomable(true)
-        .group(StateSumGroup, "1", sel_stack('1'))
+        .group(StateSumGroup, "AZ", sel_stack('AZ'))
         //.group(incidents, "incidents")
         //.stack(fatalities, "fatalities")
         .renderArea(true)
@@ -623,10 +702,11 @@ d3.csv(path, (error, csv) => {
             right: 10,
             bottom: 50
         })
-    for (var i = 2; i < 16; ++i) {
-        stackedAreaChart.stack(StateSumGroup, '' + i, sel_stack(i));
-    }
-
+    // for (var i = 2; i < 16; ++i) {
+    //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
+    // }
+    dc.renderAll('stacked_area')
+    
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
@@ -724,26 +804,33 @@ d3.csv(path, (error, csv) => {
     // print_filter("testDim");
 
     //testDim = monthOfTheYearDim;
-    var heatMapChart = dc.heatMap("#dc-heat-map-tot","map");
+    var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
 
     var heatColorMapping = d3.scale.linear()
         .domain([2500, 3200, 4000])
         .range(["green", "orange", "red"]);
 
     heatMapChart
-            .width(900)
-            .height(50)
-            .dimension(monthOfTheYearDim)
-            .group(statsByMonthOfYearGroup)
-            .keyAccessor(function(d) { return +d.key[0]; })
-            .valueAccessor(function(d) { return +d.key[1]; })
-            .colorAccessor(function(d) { return +d.value.FATALS; })
-            .title(function(d) {
-                return " Month:   " + d.key[0] + "\n" +
-                       " Year:   " + d.key[1] + "\n" +
-                       " Fatalities:   " + d.value.FATALS;})
-            // .ordinalColors(color_sheme);
-            .colors(heatColorMapping);
+        .width(900)
+        .height(50)
+        .dimension(monthOfTheYearDim)
+        .group(statsByMonthOfYearGroup)
+        .keyAccessor(function (d) {
+            return +d.key[0];
+        })
+        .valueAccessor(function (d) {
+            return +d.key[1];
+        })
+        .colorAccessor(function (d) {
+            return +d.value.FATALS;
+        })
+        .title(function (d) {
+            return " Month:   " + d.key[0] + "\n" +
+                " Year:   " + d.key[1] + "\n" +
+                " Fatalities:   " + d.value.FATALS;
+        })
+        // .ordinalColors(color_sheme);
+        .colors(heatColorMapping);
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
 
@@ -774,12 +861,12 @@ d3.csv(path, (error, csv) => {
     //         return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
     //     }
 
-        
+
     //     testDim = statsByDayOfMonthGroup
     //     print_filter("testDim")
 
     //     var yearlyHeatMapChart = dc.heatMap("#dc-heat-map-yearly","map");
-    
+
     //     yearlyHeatMapChart
     //             .width(900)
     //             .height(50)

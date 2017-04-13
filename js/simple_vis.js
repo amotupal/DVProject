@@ -1,195 +1,3 @@
-var data = [{
-        "status": "http_302",
-        "hits": 0,
-        "date": "01/03/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "01/03/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 200,
-        "date": "01/07/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 254,
-        "date": "01/06/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 200,
-        "date": "01/06/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 123,
-        "date": "01/06/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 0,
-        "date": "01/05/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "01/05/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 65,
-        "date": "01/05/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 34,
-        "date": "01/04/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "01/04/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 123,
-        "date": "01/04/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 100,
-        "date": "01/07/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 144,
-        "date": "01/07/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 28,
-        "date": "01/03/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 17,
-        "date": "01/02/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 10,
-        "date": "01/02/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 1,
-        "date": "01/02/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 23,
-        "date": "01/01/2013"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "01/01/2013"
-    },
-    {
-        "status": "http_404",
-        "hits": 2,
-        "date": "01/01/2013"
-    },
-    {
-        "status": "http_302",
-        "hits": 87,
-        "date": "12/31/2012"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "12/31/2012"
-    },
-    {
-        "status": "http_302",
-        "hits": 100,
-        "date": "12/27/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 2,
-        "date": "12/27/2012"
-    },
-    {
-        "status": "http_200",
-        "hits": 90,
-        "date": "12/30/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 2,
-        "date": "12/30/2012"
-    },
-    {
-        "status": "http_302",
-        "hits": 200,
-        "date": "12/29/2012"
-    },
-    {
-        "status": "http_200",
-        "hits": 300,
-        "date": "12/29/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 116,
-        "date": "12/29/2012"
-    },
-    {
-        "status": "http_302",
-        "hits": 100,
-        "date": "12/28/2012"
-    },
-    {
-        "status": "http_200",
-        "hits": 10,
-        "date": "12/28/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 77,
-        "date": "12/28/2012"
-    },
-    {
-        "status": "http_200",
-        "hits": 190,
-        "date": "12/27/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 100,
-        "date": "12/31/2012"
-    },
-    {
-        "status": "http_302",
-        "hits": 0,
-        "date": "12/30/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 100,
-        "date": "12/31/2012"
-    },
-    {
-        "status": "http_404",
-        "hits": 123,
-        "date": "12/30/2012"
-    },
-];
-
 full_states = {};
 full_states['WA'] = "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/WA.json";
 full_states['NV'] = "https://raw.githubusercontent.com/amotupal/DVProject/master/geo/NV.json";
@@ -310,10 +118,10 @@ state_counties["NJ"] = ["0500000US34001", "0500000US34003", "0500000US34005", "0
 var countyJson = {};
 
 var scales = {};
-scales['TX'] = 1500;
+scales['TX'] = 1200;
 scales["AL"]
 scales["OK"]
-scales["NM"]
+scales["NM"] = 1500;
 scales["NV"]
 scales["OH"]
 scales["AK"]
@@ -321,7 +129,6 @@ scales["WA"]
 scales["ND"]
 scales["CT"]
 scales["MH"]
-scales["TX"]
 scales["MO"]
 scales["DC"]
 scales["NH"]
@@ -360,30 +167,29 @@ scales["SD"]
 scales["GU"]
 scales["IL"]
 scales["VI"]
-scales["CA"]
+scales["CA"] = 1200;
 scales["AS"]
 scales["ME"]
 scales["OR"]
 scales["GA"]
 scales["KY"]
 scales["FL"]
-scales["AZ"]
+scales["AZ"] = 1500;
 scales["WV"]
 scales["VT"]
 scales["NJ"]
 var translations = {};
-translations['TX'] = [400, 0];
+translations['TX'] = [200,0];
 translations["AL"] = [];
 translations["OK"] = [];
-translations["NM"] = [];
-translations["NV"] = [];
+translations["NM"] = [300,50];
+translations["NV"] = [500, 150];
 translations["OH"] = [];
 translations["AK"] = [];
 translations["WA"] = [];
 translations["ND"] = [];
 translations["CT"] = [];
 translations["MH"] = [];
-translations["TX"] = [];
 translations["MO"] = [];
 translations["DC"] = [];
 translations["NH"] = [];
@@ -422,14 +228,14 @@ translations["SD"] = [];
 translations["GU"] = [];
 translations["IL"] = [];
 translations["VI"] = [];
-translations["CA"] = [];
+translations["CA"] = [600, 150];
 translations["AS"] = [];
 translations["ME"] = [];
 translations["OR"] = [];
 translations["GA"] = [];
 translations["KY"] = [];
 translations["FL"] = [];
-translations["AZ"] = [];
+translations["AZ"] = [500, 50];
 translations["WV"] = [];
 translations["VT"] = [];
 translations["NJ"] = [];
@@ -463,30 +269,31 @@ d3.json(usCountiesJsonPath, (_usCounties) => {
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 
 // var color_sheme = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026']
+var geo_color_scheme =  ['#1a9641', '#a6d96a', '#ffffbf', '#fdae61', '#d7191c']
 // ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
 // ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
-var ndx = crossfilter(data);
+// var ndx = crossfilter(data);
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
-data.forEach(function (d) {
-    d.date = parseDate(d.date);
-    d.Year = d.date.getFullYear();
-    d.Day = d.date.getDay() + 1;
-});
+// data.forEach(function (d) {
+//     d.date = parseDate(d.date);
+//     d.Year = d.date.getFullYear();
+//     d.Day = d.date.getDay() + 1;
+// });
 /************
 Status Ring
 *************/
-var statusRingChart = dc.pieChart("#dc-sts-pie-graph", "chart");
-var statusDim = ndx.dimension(function (d) {
-    return d.status;
-});
-var hit_status = statusDim.group().reduceSum(function (d) {
-    return d.hits;
-});
+// var statusRingChart = dc.pieChart("#dc-sts-pie-graph", "chart");
+// var statusDim = ndx.dimension(function (d) {
+//     return d.status;
+// });
+// var hit_status = statusDim.group().reduceSum(function (d) {
+//     return d.hits;
+// });
 
-var dateDim = ndx.dimension(function (d) {
-    return d.date;
-});
+// var dateDim = ndx.dimension(function (d) {
+//     return d.date;
+// });
 
 // statusRingChart
 //     .width(220).height(220)
@@ -501,17 +308,17 @@ var dateDim = ndx.dimension(function (d) {
 //     .renderTitle(false)
 //     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 
-statusRingChart
-    .width(260)
-    .height(220)
-    .externalLabels(25)
-    .externalRadiusPadding(30)
-    .drawPaths(true)
-    .dimension(statusDim)
-    .group(hit_status)
-    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+// statusRingChart
+//     .width(260)
+//     .height(220)
+//     .externalLabels(25)
+//     .externalRadiusPadding(30)
+//     .drawPaths(true)
+//     .dimension(statusDim)
+//     .group(hit_status)
+//     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 
-dc.renderAll("chart");
+// dc.renderAll("chart");
 
 
 
@@ -548,7 +355,7 @@ d3.json("Data/us_states.json", function (statesJson) {
     geoJson = statesJson;
 });
 
-var dimValues = ["FATALS","PEDS","HIT_RUN","DRUNK_DR"]
+var dimValues = ["FATALS", "PEDS", "HIT_RUN", "DRUNK_DR"]
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv"
 
 
@@ -558,14 +365,15 @@ var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_D
 // });
 var local_path = "../Sample_Data/accident_new.csv"
 var dataSet;
-function drawParallelStes(dimen, path){
+
+function drawParallelStes(dimen, path) {
     var chart = d3.parsets()
         .dimensions(dimen)
         .width(750).height(450);
-    var vis = d3.select("#dc-parallel-graph").append("svg").attr("id","parallelSets")
+    var vis = d3.select("#dc-parallel-graph").append("svg").attr("id", "parallelSets")
         .attr("width", chart.width())
         .attr("height", chart.height());
-    d3.csv(path,function(error, csv){
+    d3.csv(path, function (error, csv) {
         vis.datum(csv).call(chart)
     })
 }
@@ -603,10 +411,16 @@ d3.csv(path, (error, csv) => {
 
 
     var expenseMetrics = d3.nest()
-        .key(function(d) { return d.STATE_ABBR; })
-        .rollup(function(v) { return d3.sum(v, function(d) { return d.HIT_RUN + d.SCH_BUS; }); })
+        .key(function (d) {
+            return d.STATE_ABBR;
+        })
+        .rollup(function (v) {
+            return d3.sum(v, function (d) {
+                return d.HIT_RUN + d.SCH_BUS;
+            });
+        })
         .map(csv);
-    
+
     // console.log("expenseMetrics: ",JSON.stringify(expenseMetrics));
 
     // console.log(csv)
@@ -629,27 +443,17 @@ d3.csv(path, (error, csv) => {
     });
     var top_state = d3.max(statevalues)
     var bottom_state = d3.min(statevalues)
-
-    // console.log(top_state, bottom_state)
-    // print_filter(stateRaisedCount)
-    // orderedStateGroup = stateGroup.top(51)
-    // var top_state = orderedStateGroup[0].value / population_map[orderedStateGroup[0].key];
-    // var bottom_state = orderedStateGroup[50].value / population_map[orderedStateGroup[50].key];
-    console.log(top_state, bottom_state)
-
+    var projection = d3.geo.albersUsa()
+                .scale(600)
+                .translate([250, 150]);
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
-    // var scale = Math.min(960 * 1.2, 500 * 2.1);
-
-    // var projection = albersUsaPr()
-    //       .scale(scale)
-    //       .translate([width / 2, height / 2]);
-    usChart.width(960)
-        .height(500)
+    usChart.width(660)
+        .height(300)
+        .projection(projection)
         .dimension(states)
         .group(stateRaisedCount)
-        .colors(color_sheme)
+        .colors(geo_color_scheme)
         .colorDomain([bottom_state, top_state])
-        // .projection(projection)
         .colorAccessor(function (d) {
             return d;
         })
@@ -657,15 +461,13 @@ d3.csv(path, (error, csv) => {
             return d.properties.name;
         })
         .valueAccessor(function (kv) {
-            // console.log("kv: ",kv);
             return kv.value / population_map[kv.key];
         })
         .title(function (d) {
-            // console.log(d);
-            return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+            return "State: " + d.key + "\nNumber of accidents: " + numberFormat(d.value ? d.value * population_map[d.key] : 0);
         });
 
-// Data preparation of county chart
+    // Data preparation of county chart
     counties = accident_facts.dimension(function (d) {
         return d.GEO_ID;
     });
@@ -681,45 +483,37 @@ d3.csv(path, (error, csv) => {
 
     // var scale = Math.min(960 * 1.2, 500 * 2.1);
     var width = 560;
-    var height = 500;
+    var height = 400;
 
     dc.renderAll("counties_chart")
     var previous;
-    
+
 
     $('#dc-map-chart').on('click', function (d) {
         var selected_states = usChart.filters()
-        // console.log(selected_states)
-        if(selected_states.length == 1){
+        if (selected_states.length == 1) {
             all_counties = countyRaisedCount.all()
             var countyvalues = [];
             all_counties.forEach((val) => {
-                console.log(val)
-                if(state_counties[selected_states[0]].indexOf(val.key) != -1){
-                    console.log(val)
+                if (state_counties[selected_states[0]].indexOf(val.key) != -1) {
                     countyvalues.push(val.value);
                 }
             })
-            
+
             var top_county = d3.max(countyvalues)
             var bottom_county = d3.min(countyvalues)
         }
         if (selected_states.length == 1) {
 
             var projection = d3.geo.albersUsa()
-                .scale(2000)
-                .translate([400, 0]);
-            // console.log(state_counties[selected_states[0]])
-
-            state_counties[selected_states[0]].forEach((state_county_val) => {
-                // console.log(all_counties["0500000US" + state_county_val])
-            })
+                .scale(scales[selected_states[0]])
+                .translate(translations[selected_states[0]]);
             stateChart = dc.geoChoroplethChart("#dc-map-counties", "counties_chart");
             stateChart.width(560)
-                .height(500)
+                .height(300)
                 .dimension(counties)
                 .group(countyRaisedCount)
-                .colors(color_sheme)
+                .colors(geo_color_scheme)
                 .colorDomain([bottom_county, top_county])
                 .projection(projection)
                 .colorAccessor(function (d) {
@@ -733,10 +527,10 @@ d3.csv(path, (error, csv) => {
                     //  / population_map[kv.key];
                 })
                 .title(function (d) {
-                    // console.log(d);
-                    return "State: " + d.key + "\nTotal Amount Raised: " + numberFormat(d.value ? d.value : 0) + "M";
+                    return "State: " + d.key + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
                 });
             dc.renderAll('counties_chart');
+            dc.renderAll('map');
 
         } else {
             stateChart.resetSvg();
@@ -750,7 +544,6 @@ d3.csv(path, (error, csv) => {
     var accYearDim = accident_facts.dimension(function (d) {
         return +d.Year;
     });
-    // print_filter("yearDim");
     var acc_year_total = accYearDim.group().reduceCount(function (d) {
         return d.Year;
     });
@@ -766,24 +559,26 @@ d3.csv(path, (error, csv) => {
     /************
     Stacked Area Chart
     *************/
-    var m=[1,2,3,4,5,6,7,8,9,10,11,12];
+    var m = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
     var dateDim = accident_facts.dimension(function (d) {
         return d.TimeStamp.getMonth();
     });
-    
-    function reduceAdd(p,v){
-        p[v.STATE]=(p[v.STATE]||0)+1;
+
+    function reduceAdd(p, v) {
+        p[v.STATE] = (p[v.STATE] || 0) + 1;
         return p;
     }
-    function reduceRemove(p,v){
-        p[v.STATE]=(p[v.STATE]||0)-1;
+
+    function reduceRemove(p, v) {
+        p[v.STATE] = (p[v.STATE] || 0) - 1;
         return p;
     }
-    function reduceInitial(){
+
+    function reduceInitial() {
         return {};
     }
-    var StateSumGroup=dateDim.group().reduce(reduceAdd,reduceRemove,reduceInitial);
+    var StateSumGroup = dateDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
 
     var incidents = dateDim.group().reduceCount();
     // var minDate = dateDim.bottom(1)[0].TimeStamp;
@@ -794,9 +589,9 @@ d3.csv(path, (error, csv) => {
     var dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
     function sel_stack(i) {
-        return function(d) {
+        return function (d) {
             //console.log(i,": ",d.value[i])
-            return (d.value[i]||0);
+            return (d.value[i] || 0);
         };
     }
 
@@ -810,7 +605,7 @@ d3.csv(path, (error, csv) => {
         //.stack(fatalities, "fatalities")
         .renderArea(true)
         // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
-        .x(d3.scale.linear().domain([1,18]))
+        .x(d3.scale.linear().domain([1, 18]))
         .elasticX(true)
         .elasticY(true)
         .brushOn(true)
@@ -827,9 +622,9 @@ d3.csv(path, (error, csv) => {
             right: 10,
             bottom: 50
         })
-        for(var i = 2; i<16; ++i){
-            stackedAreaChart.stack(StateSumGroup, ''+i, sel_stack(i));
-        }
+    for (var i = 2; i < 16; ++i) {
+        stackedAreaChart.stack(StateSumGroup, '' + i, sel_stack(i));
+    }
 
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
@@ -841,7 +636,6 @@ d3.csv(path, (error, csv) => {
     var volumeChart = dc.barChart("#dc-line-chart", "map");
     var month_total = dateDim.group().reduceCount();
 
-    //print_filter("day_total");
 
     volumeChart
         .width(500).height(80)
@@ -887,7 +681,9 @@ d3.csv(path, (error, csv) => {
     //     chart.selectAll("g.x text").attr('dx', '-30').attr('dy', '-7').attr('transform', "rotate(-90)");
     // });
 
-    var monthOfTheYearDim = accident_facts.dimension(function(d) { return [+d.Month, +d.Year]; });
+    var monthOfTheYearDim = accident_facts.dimension(function (d) {
+        return [+d.Month, +d.Year];
+    });
 
     // var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduceSum(function (d) {
     //     return +d.FATALS;
@@ -897,7 +693,7 @@ d3.csv(path, (error, csv) => {
     /* callback for when data is added to the current filter results */
     function heatMapAdd(p, v) {
 
-        console.log("p add: ",p)
+        // console.log("p add: ",p)
         //++p.count;
         p.FATALS += v.FATALS;
         p.PERSONS += v.PERSONS;
@@ -907,7 +703,7 @@ d3.csv(path, (error, csv) => {
     /* callback for when data is removed from the current filter results */
     function heatMapDel(p, v) {
 
-        console.log("p del: ",p)
+        // console.log("p del: ",p)
         //--p.count;
         p.FATALS -= v.FATALS;
         p.PERSONS -= v.PERSONS;
@@ -916,33 +712,45 @@ d3.csv(path, (error, csv) => {
     }
     /* initialize p */
     function heatMapInit() {
-        return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
+        return {
+            FATALS: 0,
+            PERSONS: 0,
+            HIT_RUN: 0
+        };
     }
 
     testDim = statsByMonthOfYearGroup;
-    print_filter("testDim");
+    // print_filter("testDim");
 
     //testDim = monthOfTheYearDim;
-    var heatMapChart = dc.heatMap("#dc-heat-map","map");
+    var heatMapChart = dc.heatMap("#dc-heat-map", "map");
 
     var heatColorMapping = d3.scale.linear()
-            .domain([2500, 3200, 4000])
-            .range([ "green","orange","red"]);
-    
+        .domain([2500, 3200, 4000])
+        .range(["green", "orange", "red"]);
+
     heatMapChart
-            .width(900)
-            .height(50)
-            .dimension(monthOfTheYearDim)
-            .group(statsByMonthOfYearGroup)
-            .keyAccessor(function(d) { console.log(d); return +d.key[0]; })
-            .valueAccessor(function(d) { return +d.key[1]; })
-            .colorAccessor(function(d) { return +d.value.FATALS; })
-            .title(function(d) {
-                return " Month:   " + d.key[0] + "\n" +
-                       " Year:   " + d.key[1] + "\n" +
-                       " Fatalities:   " + d.value.FATALS;})
-            // .ordinalColors(color_sheme);
-            .colors(heatColorMapping);
+        .width(900)
+        .height(50)
+        .dimension(monthOfTheYearDim)
+        .group(statsByMonthOfYearGroup)
+        .keyAccessor(function (d) {
+            // console.log(d); 
+            return +d.key[0];
+        })
+        .valueAccessor(function (d) {
+            return +d.key[1];
+        })
+        .colorAccessor(function (d) {
+            return +d.value.FATALS;
+        })
+        .title(function (d) {
+            return " Month:   " + d.key[0] + "\n" +
+                " Year:   " + d.key[1] + "\n" +
+                " Fatalities:   " + d.value.FATALS;
+        })
+        // .ordinalColors(color_sheme);
+        .colors(heatColorMapping);
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
     heatMapChart.render();

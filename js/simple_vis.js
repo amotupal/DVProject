@@ -679,7 +679,7 @@ d3.csv(path, (error, csv) => {
         .dimension(dateDim)
         //.transitionDuration(1000)
         // .mouseZoomable(true)
-        .group(StateSumGroup, "AZ", sel_stack('AZ'))
+        .group(incidents)
         //.group(incidents, "incidents")
         //.stack(fatalities, "fatalities")
         .renderArea(true)

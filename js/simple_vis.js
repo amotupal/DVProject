@@ -3568,6 +3568,8 @@ var geo_color_scheme = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d730
 // ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
 // ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 // var ndx = crossfilter(data);
+
+var county_colors = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000'];
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
 // data.forEach(function (d) {
@@ -3792,7 +3794,7 @@ d3.csv(path, (error, csv) => {
         */
         if (selected_states.length == 0) {
             stackedAreaChart
-                .width(900).height(400)
+                .width(700).height(300)
                 .dimension(dateDim)
                 //.transitionDuration(1000)
                 // .mouseZoomable(true)
@@ -3819,15 +3821,11 @@ d3.csv(path, (error, csv) => {
                     right: 10,
                     bottom: 50
                 })
-            for (var i = 2; i < 16; ++i) {
-                stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
-            }
-            dc.renderAll('stacked_area')
         }
         else{
             
         stackedAreaChart
-            .width(900).height(400)
+            .width(700).height(300)
             .dimension(dateDim)
             //.transitionDuration(1000)
             // .mouseZoomable(true)
@@ -3875,9 +3873,9 @@ d3.csv(path, (error, csv) => {
             var bottom_county = d3.min(countyvalues)
         }
         if (selected_states.length == 1) {
-            // for (var i = 2; i < 16; ++i) {
-            //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
-            // }
+            for (var i = 2; i < 16; ++i) {
+                stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
+            }
             var projection = d3.geo.albersUsa()
                 .scale(scales[selected_states[0]])
                 .translate(translations[selected_states[0]]);
@@ -3886,7 +3884,7 @@ d3.csv(path, (error, csv) => {
                 .height(300)
                 .dimension(counties)
                 .group(countyRaisedCount)
-                .colors(geo_color_scheme)
+                .colors(county_colors)
                 .colorDomain([bottom_county, top_county])
                 .projection(projection)
                 .colorAccessor(function (d) {
@@ -3909,7 +3907,7 @@ d3.csv(path, (error, csv) => {
             stateChart.resetSvg();
         }
     //  usChart.OnClick(d);
-     usChart.filter(selected_states);
+    //  usChart.filter(selected_states);
     //  stackedAreaChart.OnClick(d);
     //  stateChart.OnClick(d);
     });
@@ -3983,7 +3981,7 @@ yearRingChart
         };
     }
     stackedAreaChart
-        .width(900).height(400)
+        .width(700).height(300)
         .dimension(dateDim)
         //.transitionDuration(1000)
         // .mouseZoomable(true)
@@ -4010,7 +4008,7 @@ yearRingChart
             bottom: 50
         });
     
-    stackedAreaChart.xAxis().ticks(0);
+    stackedAreaChart.xAxis().ticks(11);
     // for (var i = 2; i < 16; ++i) {
     //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
     // }
@@ -4121,8 +4119,8 @@ yearRingChart
         .range(["green", "orange", "red"]);
 
     heatMapChart
-        .width(900)
-        .height(200)
+        .width(700)
+        .height(250)
         .dimension(monthOfTheYearDim)
         .group(statsByMonthOfYearGroup)
         .keyAccessor(function (d) {
@@ -4140,7 +4138,7 @@ yearRingChart
                 " Fatalities:   " + d.value.FATALS;
         })
         .margins({
-            top: 5,
+            top: 30,
             left: 50,
             right: 20,
             bottom: 15

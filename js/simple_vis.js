@@ -3854,7 +3854,7 @@ d3.csv(path, (error, csv) => {
         for (var i = 1; i < selected_states.length; ++i) {
             stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
         }
-        dc.renderAll('stacked_area');
+        dc.renderAll('map');
 
 
         }
@@ -3946,7 +3946,7 @@ yearRingChart
     Stacked Area Chart
     *************/
     var m = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    var stackedAreaChart = dc.lineChart("#dc-line-graph", "stacked_area");
+    var stackedAreaChart = dc.lineChart("#dc-line-graph", "map");
     var dateDim = accident_facts.dimension(function (d) {
         return d.TimeStamp.getFullYear();
     });
@@ -4012,7 +4012,7 @@ yearRingChart
     // for (var i = 2; i < 16; ++i) {
     //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
     // }
-    dc.renderAll('stacked_area')
+    // dc.renderAll('map')
 
     
     var hits = dateDim.group().reduceSum(function (d) {
@@ -4115,7 +4115,7 @@ yearRingChart
     var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
 
     var heatColorMapping = d3.scale.linear()
-        .domain([2500, 3200, 4000])
+        .domain([100, 1000, 4000])
         .range(["green", "orange", "red"]);
 
     heatMapChart

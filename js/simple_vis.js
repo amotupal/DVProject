@@ -3563,13 +3563,16 @@ for (propertyName in full_states) {
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 
 // var color_sheme = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026']
-var geo_color_scheme = ['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#990000']
+var geo_color_scheme = ['#fef0d9', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#990000']
+var heatmap_colors = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026'];
+// ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#ffffbf','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
+
 // ['#1a9641', '#a6d96a', '#ffffbf', '#fdae61', '#d7191c']
 // ['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'];
 // ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 // var ndx = crossfilter(data);
 
-var county_colors = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000'];
+var county_colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#e34a33', '#b30000'];
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
 // data.forEach(function (d) {
@@ -3751,7 +3754,8 @@ d3.csv(path, (error, csv) => {
         .dimension(states)
         .group(stateRaisedCount)
         .colors(geo_color_scheme)
-        .colorDomain([bottom_state, top_state])
+        // .colorDomain(d3.extent(chart.data(), chart.valueAccessor()))
+        // .colorDomain([bottom_state, top_state])
         .colorAccessor(function (d) {
             return d;
         })
@@ -3764,6 +3768,7 @@ d3.csv(path, (error, csv) => {
         .title(function (d) {
             return "State: " + d.key + "\nNumber of accidents: " + numberFormat(d.value ? d.value * population_map[d.key] : 0);
         });
+
 
     // Data preparation of county chart
     counties = accident_facts.dimension(function (d) {
@@ -3786,8 +3791,11 @@ d3.csv(path, (error, csv) => {
     dc.renderAll("counties_chart")
     var previous;
 
-
-    $('#dc-map-chart').on('click', function (d) {
+    usChart.on('preRender', (chart) => {
+        chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+    });
+    usChart.on('preRedraw', (chart) => {
+        console.log(chart.filters())
         var selected_states = usChart.filters()
         /*
         AREA CHART----
@@ -3821,40 +3829,39 @@ d3.csv(path, (error, csv) => {
                     right: 10,
                     bottom: 50
                 })
-        }
-        else{
-            
-        stackedAreaChart
-            .width(700).height(300)
-            .dimension(dateDim)
-            //.transitionDuration(1000)
-            // .mouseZoomable(true)
-            .group(StateSumGroup, selected_states[0], sel_stack(selected_states[0]))
-            //.group(incidents, "incidents")
-            //.stack(fatalities, "fatalities")
-            .renderArea(true)
-            // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
-            .x(d3.scale.linear().domain([1, 18]))
-            .elasticX(true)
-            .elasticY(true)
-            .brushOn(true)
-            .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-            .yAxisLabel("Per Day")
-            //.ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
-            .title(function (d) {
-                // console.log(d);
-                return getvalues(d.data);
-            })
-            .margins({
-                top: 10,
-                left: 50,
-                right: 10,
-                bottom: 50
-            })
-        for (var i = 1; i < selected_states.length; ++i) {
-            stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
-        }
-        dc.renderAll('map');
+        } else {
+
+            stackedAreaChart
+                .width(700).height(300)
+                .dimension(dateDim)
+                //.transitionDuration(1000)
+                // .mouseZoomable(true)
+                .group(StateSumGroup, selected_states[0], sel_stack(selected_states[0]))
+                //.group(incidents, "incidents")
+                //.stack(fatalities, "fatalities")
+                .renderArea(true)
+                // .x(d3.time.scale().domain([minDate.getMonth, maxDate.getMonth]))
+                .x(d3.scale.linear().domain([1, 18]))
+                .elasticX(true)
+                .elasticY(true)
+                .brushOn(true)
+                .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+                .yAxisLabel("Per Day")
+                //.ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
+                .title(function (d) {
+                    // console.log(d);
+                    return getvalues(d.data);
+                })
+                .margins({
+                    top: 10,
+                    left: 50,
+                    right: 10,
+                    bottom: 50
+                })
+            for (var i = 1; i < selected_states.length; ++i) {
+                stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
+            }
+            dc.renderAll('map');
 
 
         }
@@ -3873,9 +3880,9 @@ d3.csv(path, (error, csv) => {
             var bottom_county = d3.min(countyvalues)
         }
         if (selected_states.length == 1) {
-            for (var i = 2; i < 16; ++i) {
-                stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
-            }
+            // for (var i = 2; i < 16; ++i) {
+            //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
+            // }
             var projection = d3.geo.albersUsa()
                 .scale(scales[selected_states[0]])
                 .translate(translations[selected_states[0]]);
@@ -3900,17 +3907,22 @@ d3.csv(path, (error, csv) => {
                 .title(function (d) {
                     return "County: " + county_names[d.key] + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
                 });
+            stateChart.on('preRender', (chart) => {
+                chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+            });
+            stateChart.on('preRedraw', (chart) => {
+                console.log("county Predraw")
+                chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+            })
             dc.renderAll('counties_chart');
 
 
         } else {
             stateChart.resetSvg();
         }
-    //  usChart.OnClick(d);
-    //  usChart.filter(selected_states);
-    //  stackedAreaChart.OnClick(d);
-    //  stateChart.OnClick(d);
-    });
+
+        chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+    })
 
     /************
     Year Ring
@@ -3922,26 +3934,17 @@ d3.csv(path, (error, csv) => {
     var acc_year_total = accYearDim.group().reduceCount(function (d) {
         return d.Year;
     });
-    // yearRingChart
-    //     .width(180).height(180)
-    //     .legend(dc.legend().x(70).y(70).itemHeight(13).gap(5))
-    //     .dimension(accYearDim)
-    //     .group(acc_year_total)
-    //     .innerRadius(45)
-    //     .renderLabel(false)
-    //     .renderTitle(false)
-    //     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
 
 
-yearRingChart
-    .width(260)
-    .height(220)
-    .externalLabels(25)
-    .externalRadiusPadding(30)
-    .drawPaths(true)
-    .dimension(accYearDim)
-    .group(acc_year_total)
-    .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+    yearRingChart
+        .width(260)
+        .height(220)
+        .externalLabels(25)
+        .externalRadiusPadding(30)
+        .drawPaths(true)
+        .dimension(accYearDim)
+        .group(acc_year_total)
+        .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
     /************
     Stacked Area Chart
     *************/
@@ -4007,14 +4010,14 @@ yearRingChart
             right: 10,
             bottom: 50
         });
-    
+
     stackedAreaChart.xAxis().ticks(11);
     // for (var i = 2; i < 16; ++i) {
     //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
     // }
     // dc.renderAll('map')
 
-    
+
     var hits = dateDim.group().reduceSum(function (d) {
         return d.FATALS;
     });
@@ -4115,7 +4118,7 @@ yearRingChart
     var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
 
     var heatColorMapping = d3.scale.linear()
-        .domain([100, 1000, 4000])
+        // .domain([100, 1000, 4000])
         .range(["green", "orange", "red"]);
 
     heatMapChart
@@ -4143,8 +4146,22 @@ yearRingChart
             right: 20,
             bottom: 15
         })
-        // .ordinalColors(color_sheme);
-        .colors(heatColorMapping);
+    // .ordinalColors(color_sheme);
+    .colors(heatmap_colors)
+    .calculateColorDomain();
+
+    heatMapChart.on('preRender', (chart) => {
+        // var heatColorMapping = d3.scale.linear()
+        //     .domain(d3.extent(chart.data(), chart.valueAccessor()))
+        //     .range(["green", "orange", "red"]);
+        chart.calculateColorDomain();
+    });
+    heatMapChart.on('preRedraw', (chart) => {
+        // var heatColorMapping = d3.scale.linear()
+        //     .domain(d3.extent(chart.data(), chart.valueAccessor()))
+        //     .range(["green", "orange", "red"]);
+        chart.calculateColorDomain();
+    })
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
 

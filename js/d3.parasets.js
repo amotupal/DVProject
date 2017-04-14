@@ -715,7 +715,7 @@ var list={};
         if(d.parent.dimension !== undefined){
           list[d.parent.dimension] = d.parent.name;
         }
-        console.log("in here: ",d)
+        // console.log("in here: ",d)
         if(window[d.dimension][d.name] !== undefined){
           path.unshift(window[d.dimension][d.name]); 
         }else{

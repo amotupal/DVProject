@@ -119,126 +119,126 @@ var countyJson = {};
 
 var scales = {};
 scales['TX'] = 1200;
-scales["AL"]
-scales["OK"]
+scales["AL"] = 2500;
+scales["OK"] = 2000;
 scales["NM"] = 1500;
-scales["NV"]
-scales["OH"]
+scales["NV"] = 1500;
+scales["OH"] = 3000;
 scales["AK"]
-scales["WA"]
-scales["ND"]
-scales["CT"]
+scales["WA"] = 1750;
+scales["ND"] = 2000;
+scales["CT"] = 4000;
 scales["MH"]
-scales["MO"]
+scales["MO"] = 2500;
 scales["DC"]
-scales["NH"]
+scales["NH"] = 4000;
 scales["IN"]
-scales["VA"]
-scales["PA"]
-scales["AR"]
-scales["NE"]
-scales["RI"]
-scales["SC"]
+scales["VA"] = 3000;
+scales["PA"] = 3000;
+scales["AR"] = 2500;
+scales["NE"] = 2000;
+scales["RI"] = 4000;
+scales["SC"] = 3000;
 scales["FM"]
-scales["LA"]
-scales["NC"]
-scales["KS"]
-scales["WI"]
-scales["CO"]
-scales["TN"]
-scales["NY"]
+scales["LA"] = 2000;
+scales["NC"] = 3000;
+scales["KS"] = 2000;
+scales["WI"] = 2500;
+scales["CO"] = 2000;
+scales["TN"] = 2500;
+scales["NY"] = 3000;
 scales["PW"]
-scales["DE"]
-scales["IA"]
+scales["DE"] = 4500;
+scales["IA"] = 2500;
 scales["MP"]
 scales["UM"]
-scales["UT"]
-scales["MT"]
-scales["MS"]
-scales["MN"]
-scales["MA"]
-scales["ID"]
-scales["MI"]
+scales["UT"] = 1500;
+scales["MT"] = 2000;
+scales["MS"] = 2500;
+scales["MN"] = 2500;
+scales["MA"] = 4000;
+scales["ID"] = 1500;
+scales["MI"] = 2500;
 scales["PR"]
-scales["MD"]
+scales["MD"] = 4500;
 scales["HI"]
-scales["WY"]
-scales["SD"]
+scales["WY"] = 2000;
+scales["SD"] = 2000;
 scales["GU"]
-scales["IL"]
+scales["IL"] = 2500;
 scales["VI"]
 scales["CA"] = 1200;
 scales["AS"]
-scales["ME"]
-scales["OR"]
-scales["GA"]
-scales["KY"]
-scales["FL"]
+scales["ME"] = 3500;
+scales["OR"] = 1750;
+scales["GA"] = 2500;
+scales["KY"] = 2500;
+scales["FL"] = 2000;
 scales["AZ"] = 1500;
-scales["WV"]
-scales["VT"]
-scales["NJ"]
+scales["WV"] = 3000;
+scales["VT"] = 4000;
+scales["NJ"] = 4000;
 var translations = {};
 translations['TX'] = [200, 0];
-translations["AL"] = [];
-translations["OK"] = [];
+translations["AL"] = [-100, -100];
+translations["OK"] = [200, 50];
 translations["NM"] = [300, 50];
 translations["NV"] = [500, 150];
-translations["OH"] = [];
+translations["OH"] = [-200, 250];
 translations["AK"] = [];
-translations["WA"] = [];
-translations["ND"] = [];
-translations["CT"] = [];
+translations["WA"] = [600, 450];
+translations["ND"] = [200, 400];
+translations["CT"] = [-950, 450];
 translations["MH"] = [];
-translations["MO"] = [];
+translations["MO"] = [100, 100];
 translations["DC"] = [];
-translations["NH"] = [];
+translations["NH"] = [-1050, 650];
 translations["IN"] = [];
-translations["VA"] = [];
-translations["PA"] = [];
-translations["AR"] = [];
-translations["NE"] = [];
-translations["RI"] = [];
-translations["SC"] = [];
+translations["VA"] = [-400, 150];
+translations["PA"] = [-550, 300];
+translations["AR"] = [100, 0];
+translations["NE"] = [200, 200];
+translations["RI"] = [-1050, 500];
+translations["SC"] = [-400, -50];
 translations["FM"] = [];
-translations["LA"] = [];
-translations["NC"] = [];
-translations["KS"] = [];
-translations["WI"] = [];
-translations["CO"] = [];
-translations["TN"] = [];
-translations["NY"] = [];
+translations["LA"] = [0, -100];
+translations["NC"] = [-350, 0];
+translations["KS"] = [200, 100];
+translations["WI"] = [-100, 400];
+translations["CO"] = [400, 150];
+translations["TN"] = [-100, 0];
+translations["NY"] = [-600, 350];
 translations["PW"] = [];
-translations["DE"] = [];
-translations["IA"] = [];
+translations["DE"] = [-950, 300];
+translations["IA"] = [100, 300];
 translations["MP"] = [];
 translations["UM"] = [];
-translations["UT"] = [];
-translations["MT"] = [];
-translations["MS"] = [];
-translations["MN"] = [];
-translations["MA"] = [];
-translations["ID"] = [];
-translations["MI"] = [];
+translations["UT"] = [400, 150];
+translations["MT"] = [550, 400];
+translations["MS"] = [-100, -100];
+translations["MN"] = [100, 500];
+translations["MA"] = [-1050, 500];
+translations["ID"] = [600, 350];
+translations["MI"] = [-100, 425];
 translations["PR"] = [];
-translations["MD"] = [];
+translations["MD"] = [-750, 250];
 translations["HI"] = [];
-translations["WY"] = [];
-translations["SD"] = [];
+translations["WY"] = [400, 300];
+translations["SD"] = [200, 300];
 translations["GU"] = [];
-translations["IL"] = [];
+translations["IL"] = [-100, 200];
 translations["VI"] = [];
 translations["CA"] = [600, 150];
 translations["AS"] = [];
-translations["ME"] = [];
-translations["OR"] = [];
-translations["GA"] = [];
-translations["KY"] = [];
-translations["FL"] = [];
+translations["ME"] = [-1050, 700];
+translations["OR"] = [600, 350];
+translations["GA"] = [-200, -100];
+translations["KY"] = [-100, 100];
+translations["FL"] = [-200, -200];
 translations["AZ"] = [500, 50];
-translations["WV"] = [];
-translations["VT"] = [];
-translations["NJ"] = [];
+translations["WV"] = [-450, 200];
+translations["VT"] = [-1050, 650];
+translations["NJ"] = [-850, 350];
 
 var county_names = {};
 county_names["0500000US01001"] = "Autauga";
@@ -3575,63 +3575,6 @@ var heatmap_colors = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#f
 var county_colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#e34a33', '#b30000'];
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
-// data.forEach(function (d) {
-//     d.date = parseDate(d.date);
-//     d.Year = d.date.getFullYear();
-//     d.Day = d.date.getDay() + 1;
-// });
-/************
-Status Ring
-*************/
-// var statusRingChart = dc.pieChart("#dc-sts-pie-graph", "chart");
-// var statusDim = ndx.dimension(function (d) {
-//     return d.status;
-// });
-// var hit_status = statusDim.group().reduceSum(function (d) {
-//     return d.hits;
-// });
-
-// var dateDim = ndx.dimension(function (d) {
-//     return d.date;
-// });
-
-// statusRingChart
-//     .width(220).height(220)
-//     .legend(dc.legend().x(65).y(65).itemHeight(13).gap(5))
-//     .dimension(statusDim)
-//     .group(hit_status)
-//     .innerRadius(35)
-//     .externalRadiusPadding(50)
-//     .drawPaths(true)
-//     .externalLabels(50)
-//     .renderLabel(false)
-//     .renderTitle(false)
-//     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
-
-// statusRingChart
-//     .width(260)
-//     .height(220)
-//     .externalLabels(25)
-//     .externalRadiusPadding(30)
-//     .drawPaths(true)
-//     .dimension(statusDim)
-//     .group(hit_status)
-//     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
-
-// dc.renderAll("chart");
-
-
-
-// $('#dc-yr-pie-graph').on('click', function () {
-
-//     var minDate2 = dateDim.bottom(1)[0].date;
-//     var maxDate2 = dateDim.top(1)[0].date;
-//     // console.log("minDate2: ",minDate2,"maxDate2: ",maxDate2)
-//     volumeChart.x(d3.time.scale().domain([minDate2, maxDate2]));
-//     volumeChart.redraw();
-// });
-//var temp;
-var demo;
 var states;
 var stateRaisedCount;
 var accident_facts;
@@ -3655,14 +3598,7 @@ d3.json("Data/us_states.json", function (statesJson) {
     geoJson = statesJson;
 });
 
-//var dimValues = ["FATALS", "PEDS", "HIT_RUN", "DRUNK_DR"]
 var path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_all.csv"
-
-
-// d3.csv("https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/accident_new.csv", function(csv) {
-//     //console.log("what:::",csv)
-//   vis.datum(csv).call(chart);
-// });
 var local_path = "../Sample_Data/accident_all.csv"
 var dataSet;
 
@@ -3695,22 +3631,6 @@ d3.csv(path, (error, csv) => {
         item.HIT_RUN = +item.HIT_RUN;
     });
 
-    // var nested_data = d3.nest()
-    // .key(function(d) { return d.STATE_ABBR}).sortKeys(d3.ascending)
-    // .rollup(function(v) { return d3.sum(v, function(d) { return d.HIT_RUN + d.SCH_BUS; }); })
-    // .entries(csv);
-
-    // var list = d3.select("#featSlect")
-
-    // list.selectAll("option")
-    //     .data(nested_data)
-    //     .enter()
-    //     .append("option")
-    //     .attr("value", function(d) {return d.key;})
-    //     .text(function(d) {
-    //     return d.key; });
-
-
     var expenseMetrics = d3.nest()
         .key(function (d) {
             return d.STATE_ABBR;
@@ -3733,17 +3653,10 @@ d3.csv(path, (error, csv) => {
     });
     stateGroup = states.group();
     stateRaisedCount = stateGroup.reduceCount();
-    stateCounts = stateRaisedCount.all()
 
     // stateRaisedFatalities = stateGroup.reduceSum(function (d) {
     //     return d.FATALS;
     // });
-    var statevalues = []
-    stateCounts.forEach((index, value) => {
-        statevalues.push(index.value / population_map[index.key])
-    });
-    var top_state = d3.max(statevalues)
-    var bottom_state = d3.min(statevalues)
     var projection = d3.geo.albersUsa()
         .scale(600)
         .translate([250, 150]);
@@ -3754,8 +3667,6 @@ d3.csv(path, (error, csv) => {
         .dimension(states)
         .group(stateRaisedCount)
         .colors(geo_color_scheme)
-        // .colorDomain(d3.extent(chart.data(), chart.valueAccessor()))
-        // .colorDomain([bottom_state, top_state])
         .colorAccessor(function (d) {
             return d;
         })
@@ -3776,7 +3687,6 @@ d3.csv(path, (error, csv) => {
     });
     countyGroup = counties.group();
     countyRaisedCount = countyGroup.reduceCount();
-    countyCounts = countyRaisedCount.all()
 
     // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
     //     return d.FATALS;
@@ -3865,34 +3775,17 @@ d3.csv(path, (error, csv) => {
 
 
         }
-
         if (selected_states.length == 1) {
-
-            all_counties = countyRaisedCount.all()
-            var countyvalues = [];
-            all_counties.forEach((val) => {
-                if (state_counties[selected_states[0]].indexOf(val.key) != -1) {
-                    countyvalues.push(val.value);
-                }
-            })
-
-            var top_county = d3.max(countyvalues)
-            var bottom_county = d3.min(countyvalues)
-        }
-        if (selected_states.length == 1) {
-            // for (var i = 2; i < 16; ++i) {
-            //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
-            // }
             var projection = d3.geo.albersUsa()
                 .scale(scales[selected_states[0]])
                 .translate(translations[selected_states[0]]);
-            stateChart = dc.geoChoroplethChart("#dc-map-counties", "counties_chart");
+            stateChart = dc.geoChoroplethChart("#dc-map-counties", "counties");
             stateChart.width(560)
                 .height(300)
                 .dimension(counties)
                 .group(countyRaisedCount)
                 .colors(county_colors)
-                .colorDomain([bottom_county, top_county])
+                // .colorDomain([bottom_county, top_county])
                 .projection(projection)
                 .colorAccessor(function (d) {
                     return d;
@@ -3914,7 +3807,8 @@ d3.csv(path, (error, csv) => {
                 console.log("county Predraw")
                 chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
             })
-            dc.renderAll('counties_chart');
+            dc.renderAll('counties');
+            dc.renderAll('map');
 
 
         } else {

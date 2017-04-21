@@ -1,9 +1,5 @@
 var usCounties;
 
-// full_states[0].keys().forEach((d) => {
-//     console.log(d);
-// })
-
 function readGeoJSon(state_name, cb) {
     d3.json(full_states[state_name], function (_countyJson) {
         cb(state_name, _countyJson);
@@ -11,12 +7,9 @@ function readGeoJSon(state_name, cb) {
 }
 
 for (propertyName in full_states) {
-    // countyJson[propertyName] = readGeoJSon(propertyName);
     readGeoJSon(propertyName, function (_name, _countyJson) {
         countyJson[_name] = _countyJson;
     })
-
-    // console.log(readGeoJSon(propertyName))
 }
 
 
@@ -39,7 +32,18 @@ var states;
 var stateRaisedCount;
 var accident_facts;
 var population_map = {};
+var county_population_map = {};
 
+var github_path_countypop = "https://raw.githubusercontent.com/amotupal/DVProject/master/Data/County_Population.csv";
+d3.csv(github_path_countypop, (error, pops) => {
+    if (error) {
+        console.log(error);
+    } else {
+        pops.forEach((item, index) => {
+            county_population_map[item.County] = item.Population;
+        });
+    }
+});
 var github_path = "https://raw.githubusercontent.com/amotupal/DVProject/master/Sample_Data/state_population.csv"
 var local_path = "../Sample_Data/state_population.csv"
 d3.csv(github_path, (error, pops) => {
@@ -151,6 +155,7 @@ d3.csv(path, (error, csv) => {
     // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
     //     return d.FATALS;
     // });
+    
     var stateChart;
     stateChart = dc.geoChoroplethChart("#dc-map-counties", "map");
     stateChart.width(560)
@@ -166,11 +171,11 @@ d3.csv(path, (error, csv) => {
             return d;
         })
         .valueAccessor(function (kv) {
-            return kv.value;
-            //  / population_map[kv.key];
+            console.log(kv)
+            return kv.value / county_population_map[kv.key];
         })
         .title(function (d) {
-            return "County: " + county_names[d.key] + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
+            return "County: " + county_names[d.key] + "\nNumber of accidents : " + numberFormat(d.value ? d.value * county_population_map[d.key]: 0);
         });
 
     // var scale = Math.min(960 * 1.2, 500 * 2.1);

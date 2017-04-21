@@ -84,14 +84,14 @@
                 <div class='row-fluid pie-graph col-sm-6' id='dc-sts-pie-graph'></div>
             </div>
             <div class='chart-graph col-sm-5' id='dc-heat-map-tot'></div>
-            <div class='chart-graph col-sm-12 well' id='dc-heat-map-yearly'></div>
+            <!--<div class='chart-graph col-sm-12' id='dc-heat-map-yearly'></div>-->
             </div>
             </div>
         </div>
     </div>
     <script src='js/viz_constants.js' type='text/javascript'></script>
     <script src='js/simple_vis.js' type='text/javascript'></script>
-    <script type="text/javascript">
+    <script type="text/javascript">      
         $(document).ready(function () {
             var checkboxes = document.getElementById('multicheckbox');
             var checkboxesChecked = [];
@@ -101,6 +101,7 @@
                 }
             }
             drawParallelStes(checkboxesChecked, path);
+            checkList = checkboxesChecked;
             $('#multicheckbox').multiselect();
             $('#multicheckbox1').multiselect();
             $('#multicheckbox2').multiselect();
@@ -114,6 +115,7 @@
                 }
                 $('#parallelSets').remove();
                 drawParallelStes(checkboxesChecked, path);
+                checkList = checkboxesChecked;
             });
 
         });

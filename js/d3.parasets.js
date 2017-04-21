@@ -28,15 +28,15 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY ;OF SUCH DAMAGE.*/
 var SchoolBus={
-"0":"Not Involved",
-"1":"Involved",
-"8":"Unknown"
+  "0":"Not Involved",
+  "1":"Involved",
+  "8":"Unknown"
 };
 var CollisionType={
-"1":"Front",
-"2":"Rear",
-"3":"Angle",
-"4":"Random"
+  "1":"Front",
+  "2":"Rear",
+  "3":"Angle",
+  "4":"Random"
 };
 var HIT_RUN = {
   "0":"0",
@@ -47,11 +47,11 @@ var HIT_RUN = {
   "5":"5"
 };
 var WEATHER={
-"1":"Moderate",
-"2":"Rain",
-"3":"Snow",
-"4":"Fog",
-"5":"Winds"
+  "1":"Moderate",
+  "2":"Rain",
+  "3":"Snow",
+  "4":"Fog",
+  "5":"Winds"
 };
 
 var list={};
@@ -275,6 +275,9 @@ var list={};
                 showTooltip(tooltip_.call(this, d));
                 d3.event.stopPropagation();
               });
+          // mouse.on("click",function(d){
+          //     console.log("!!!!!!!!!!!!!!!!!!! d:");
+          //     });
           mouse
               .sort(function(a, b) { return b.count - a.count; })
               .attr("d", ribbonPathStatic);
@@ -715,25 +718,18 @@ var list={};
         if(d.parent.dimension !== undefined){
           list[d.parent.dimension] = d.parent.name;
         }
-        // console.log("in here: ",d)
         if(window[d.dimension][d.name] !== undefined){
           path.unshift(window[d.dimension][d.name]); 
         }else{
           path.unshift(d.name);
         }
-        
         d = d.parent;
       } 
     }
-    var pathlast =  path.pop();
     return path.join(" &rarr; ") + "<br>" + comma(count) + " (" + percent(count / d.count) + ")";
-    //return "<b>"+ percent(count / parentcount) + "</b>" + " of students who are " + "<b>"+ path.join("</b><br> and <b>")+ "</b>" + "<br>"  + "are " + "<b>" + pathlast + "</b>" +  ".<br>" + "These <b>"  + comma(count) + "</b> students make up <b>" + percent(count/d.count) + "</b> of all students.";
   }
 
-var x;
   function defaultCategoryTooltip(d) {
-   //x = window[d.dimension.name];
-    //console.log("default:  ",window[d.dimension.name],"  ,,,",d.name)
     var str;
     if(window[d.dimension.name][d.name] !== undefined){
       str = window[d.dimension.name][d.name];

@@ -124,4 +124,4 @@ print(len(pd.unique(data['COUNTY'] + data['STATE'])))
 print(len(pd.unique(data['COUNTY'] + data['STATE'])))
 
 
-# data.to_csv('accident_all.csv')
+# data.to_csv('accident_all.csv')0500000US56037

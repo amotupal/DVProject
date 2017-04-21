@@ -3614,7 +3614,7 @@ function drawParallelStes(dimen, path) {
     })
 }
 var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
-//drawParallelStes(dimValues, path);
+// drawParallelStes(dimValues, path);
 
 
 var testDim;
@@ -3692,25 +3692,81 @@ d3.csv(path, (error, csv) => {
     //     return d.FATALS;
     // });
     var stateChart;
-
+    stateChart = dc.geoChoroplethChart("#dc-map-counties", "map");
+    stateChart.width(560)
+        .height(300)
+        .dimension(counties)
+        .group(countyRaisedCount)
+        .colors(county_colors)
+        .overlayGeoJson(countyJson['AZ'].features, 'AZ', function (d) {
+            return d.properties.GEO_ID;
+        })
+        // .colorDomain([bottom_county, top_county])
+        .colorAccessor(function (d) {
+            return d;
+        })
+        .valueAccessor(function (kv) {
+            return kv.value;
+            //  / population_map[kv.key];
+        })
+        .title(function (d) {
+            return "County: " + county_names[d.key] + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
+        });
 
     // var scale = Math.min(960 * 1.2, 500 * 2.1);
-    var width = 560;
-    var height = 400;
 
     dc.renderAll("counties_chart")
     var previous;
 
+    stateChart.on('preRender', (chart) => {
+
+
+        if (usChart.filters().length == 1) {
+            var projection = d3.geo.albersUsa()
+                .scale(scales[usChart.filters()[0]])
+                .translate(translations[usChart.filters()[0]]);
+            chart.projection(projection)
+                .overlayGeoJson(countyJson[usChart.filters()[0]].features, usChart.filters()[0], function (d) {
+                    return d.properties.GEO_ID;
+                })
+        } else {
+            document.getElementById('dc-map-counties').style.visibility = "hidden";
+        }
+        chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+    });
+    stateChart.on('preRedraw', (chart) => {
+
+
+        if (usChart.filters().length == 1) {
+ 
+
+            var projection = d3.geo.albersUsa()
+                .scale(scales[usChart.filters()[0]])
+                .translate(translations[usChart.filters()[0]]);
+            document.getElementById('dc-map-counties').style.visibility = "visible";
+            chart.projection(projection)
+                .overlayGeoJson(countyJson[usChart.filters()[0]].features, usChart.filters()[0], function (d) {
+                    return d.properties.GEO_ID;
+                })
+        } else {
+            document.getElementById('dc-map-counties').style.visibility = "hidden";
+                       stateJsons = chart.geoJsons();
+            stateJsons.forEach((statejson) => {
+                chart.removeGeoJson(statejson.name)
+            });
+        }
+        chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
+    })
     usChart.on('preRender', (chart) => {
         chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
     });
     usChart.on('preRedraw', (chart) => {
-        console.log(chart.filters())
         var selected_states = usChart.filters()
         /*
         AREA CHART----
         */
         if (selected_states.length == 0) {
+            print_filter(incidents)
             stackedAreaChart
                 .width(700).height(300)
                 .dimension(dateDim)
@@ -3730,7 +3786,7 @@ d3.csv(path, (error, csv) => {
                 .yAxisLabel("Per Day")
                 //.ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"])
                 .title(function (d) {
-                    // console.log(d);
+                    console.log(d);
                     return getvalues(d.data);
                 })
                 .margins({
@@ -3771,50 +3827,11 @@ d3.csv(path, (error, csv) => {
             for (var i = 1; i < selected_states.length; ++i) {
                 stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
             }
-            dc.renderAll('map');
+
 
 
         }
-        if (selected_states.length == 1) {
-            var projection = d3.geo.albersUsa()
-                .scale(scales[selected_states[0]])
-                .translate(translations[selected_states[0]]);
-            stateChart = dc.geoChoroplethChart("#dc-map-counties", "counties");
-            stateChart.width(560)
-                .height(300)
-                .dimension(counties)
-                .group(countyRaisedCount)
-                .colors(county_colors)
-                // .colorDomain([bottom_county, top_county])
-                .projection(projection)
-                .colorAccessor(function (d) {
-                    return d;
-                })
-                .overlayGeoJson(countyJson[selected_states[0]].features, selected_states, function (d) {
-                    return d.properties.GEO_ID;
-                })
-                .valueAccessor(function (kv) {
-                    return kv.value;
-                    //  / population_map[kv.key];
-                })
-                .title(function (d) {
-                    return "County: " + county_names[d.key] + "\nNumber of accidents : " + numberFormat(d.value ? d.value : 0);
-                });
-            stateChart.on('preRender', (chart) => {
-                chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
-            });
-            stateChart.on('preRedraw', (chart) => {
-                console.log("county Predraw")
-                chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
-            })
-            dc.renderAll('counties');
-            dc.renderAll('map');
-
-
-        } else {
-            stateChart.resetSvg();
-        }
-
+        dc.renderAll('map');
         chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
     })
 
@@ -4040,9 +4057,9 @@ d3.csv(path, (error, csv) => {
             right: 20,
             bottom: 15
         })
-    // .ordinalColors(color_sheme);
-    .colors(heatmap_colors)
-    .calculateColorDomain();
+        // .ordinalColors(color_sheme);
+        .colors(heatmap_colors)
+        .calculateColorDomain();
 
     heatMapChart.on('preRender', (chart) => {
         // var heatColorMapping = d3.scale.linear()
@@ -4059,56 +4076,73 @@ d3.csv(path, (error, csv) => {
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
 
-    //  $('#dc-heat-map-tot').on('click', function (d) {
-    //     var selected = heatMapChart.filters()
-    //     console.log("selected" ,selected)
-    //     var selectStr = ""+selected[0][0]+""+selected[0][1]
+    $('#dc-heat-map-tot').on('click', function (d) {
+        var selected = heatMapChart.filters()
+        console.log("selected", selected)
+        var selectStr = "" + selected[0][0] + "" + selected[0][1]
 
-    //     var dayOfTheMonthDim = accident_facts.dimension(function(d) { return [d.Day, d.Month, d.Year] });
-    //     dayOfTheMonthDim.filter(function(d){ 
-    //         // console.log("filter d: ",d[1]," " ,d[2],":::",selected[0][0]," ",selected[0][1])
-    //         return d[1]+""+d[2] === selectStr;
-    //     })
-    //     var statsByDayOfMonthGroup = dayOfTheMonthDim.group().reduce(heatMap1Add, heatMap1Del, heatMap1Init);
-    //     function heatMap1Add(p, v) {
-    //         p.FATALS += v.FATALS;
-    //         p.PERSONS += v.PERSONS;
-    //         p.HIT_RUN += v.HIT_RUN;
-    //         return p;
-    //     }
-    //     function heatMap1Del(p, v) {
-    //         p.FATALS -= v.FATALS;
-    //         p.PERSONS -= v.PERSONS;
-    //         p.HIT_RUN -= v.HIT_RUN;
-    //         return p;
-    //     }
-    //     function heatMap1Init() {
-    //         return {FATALS: 0, PERSONS: 0, HIT_RUN: 0};
-    //     }
+        var dayOfTheMonthDim = accident_facts.dimension(function (d) {
+            return [d.Day, d.Month, d.Year]
+        });
+        dayOfTheMonthDim.filter(function (d) {
+            // console.log("filter d: ",d[1]," " ,d[2],":::",selected[0][0]," ",selected[0][1])
+            return d[1] + "" + d[2] === selectStr;
+        })
+        var statsByDayOfMonthGroup = dayOfTheMonthDim.group().reduce(heatMap1Add, heatMap1Del, heatMap1Init);
+
+        function heatMap1Add(p, v) {
+            p.FATALS += v.FATALS;
+            p.PERSONS += v.PERSONS;
+            p.HIT_RUN += v.HIT_RUN;
+            return p;
+        }
+
+        function heatMap1Del(p, v) {
+            p.FATALS -= v.FATALS;
+            p.PERSONS -= v.PERSONS;
+            p.HIT_RUN -= v.HIT_RUN;
+            return p;
+        }
+
+        function heatMap1Init() {
+            return {
+                FATALS: 0,
+                PERSONS: 0,
+                HIT_RUN: 0
+            };
+        }
 
 
-    //     testDim = statsByDayOfMonthGroup
-    //     print_filter("testDim")
+        testDim = statsByDayOfMonthGroup
+        print_filter("testDim")
 
-    //     var yearlyHeatMapChart = dc.heatMap("#dc-heat-map-yearly","map");
+        var yearlyHeatMapChart = dc.heatMap("#dc-heat-map-yearly", "map");
 
-    //     yearlyHeatMapChart
-    //             .width(900)
-    //             .height(50)
-    //             .dimension(dayOfTheMonthDim)
-    //             .group(statsByMonthOfYearGroup)
-    //             .keyAccessor(function(d) { console.log(d); return +d.key[0]%7 + 1; })
-    //             .valueAccessor(function(d) { return +d.key[1]; })
-    //             .colorAccessor(function(d) { return +d.value.FATALS; })
-    //             .title(function(d) {
-    //                 return " Month:   " + d.key[0] + "\n" +
-    //                     " Year:   " + d.key[1] + "\n" +
-    //                     " Fatalities:   " + d.value.FATALS;})
-    //             // .ordinalColors(color_sheme);
-    //             .colors(heatColorMapping);
-    //     yearlyHeatMapChart.xBorderRadius(1);
-    //     yearlyHeatMapChart.yBorderRadius(1);
-    //  });
+        yearlyHeatMapChart
+            .width(900)
+            .height(50)
+            .dimension(dayOfTheMonthDim)
+            .group(statsByMonthOfYearGroup)
+            .keyAccessor(function (d) {
+                console.log(d);
+                return +d.key[0] % 7 + 1;
+            })
+            .valueAccessor(function (d) {
+                return +d.key[1];
+            })
+            .colorAccessor(function (d) {
+                return +d.value.FATALS;
+            })
+            .title(function (d) {
+                return " Month:   " + d.key[0] + "\n" +
+                    " Year:   " + d.key[1] + "\n" +
+                    " Fatalities:   " + d.value.FATALS;
+            })
+            // .ordinalColors(color_sheme);
+            .colors(heatColorMapping);
+        yearlyHeatMapChart.xBorderRadius(1);
+        yearlyHeatMapChart.yBorderRadius(1);
+    });
     dc.renderAll("map");
 });
 

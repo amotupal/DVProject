@@ -27,33 +27,6 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY ;OF SUCH DAMAGE.*/
-var SchoolBus={
-  "0":"Not Involved",
-  "1":"Involved",
-  "8":"Unknown"
-};
-var CollisionType={
-  "1":"Front",
-  "2":"Rear",
-  "3":"Angle",
-  "4":"Random"
-};
-var HIT_RUN = {
-  "0":"0",
-  "1":"1",
-  "2":"2",
-  "3":"3",
-  "4":"4",
-  "5":"5"
-};
-var WEATHER={
-  "1":"Moderate",
-  "2":"Rain",
-  "3":"Snow",
-  "4":"Fog",
-  "5":"Winds"
-};
-
 var list={};
 (function() {
   d3.parsets = function() {
@@ -275,9 +248,6 @@ var list={};
                 showTooltip(tooltip_.call(this, d));
                 d3.event.stopPropagation();
               });
-          // mouse.on("click",function(d){
-          //     console.log("!!!!!!!!!!!!!!!!!!! d:");
-          //     });
           mouse
               .sort(function(a, b) { return b.count - a.count; })
               .attr("d", ribbonPathStatic);

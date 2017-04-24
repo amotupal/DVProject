@@ -32,6 +32,9 @@ var accident_facts;
 var population_map = {};
 var county_population_map = {};
 
+var colTypeCheckList = [];
+var newColTypeCheckList = [];
+
 var github_path_countypop = "https://raw.githubusercontent.com/amotupal/DVProject/master/Data/County_Population.csv";
 d3.csv(github_path_countypop, (error, pops) => {
     if (error) {
@@ -51,7 +54,6 @@ d3.csv(github_path, (error, pops) => {
         pops.forEach((item, index) => {
             population_map[item.State] = item.Population;
         });
-        // console.log(population_map);
     }
 });
 
@@ -75,7 +77,7 @@ function drawParallelStes(dimen, path) {
 function drawFromCSV(dimen, csvFile){
     var chart = d3.parsets()
         .dimensions(dimen)
-        .width(750).height(450);
+        .width(850).height(650);
     var vis = d3.select("#dc-parallel-graph").append("svg").attr("id", "parallelSets")
         .attr("width", chart.width())
         .attr("height", chart.height());
@@ -86,7 +88,25 @@ var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 var checkList = [];
 var testDim;
 d3.csv(path, (error, csv) => {
+    console.log("loaded!!!!!!!!");
     dataSet = csv;
+    var checkboxes = document.getElementById('multicheckbox');
+    var checkboxesChecked = [];
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].selected) {
+            checkboxesChecked.push(checkboxes[i].value);
+        }
+    }
+    drawFromCSV(checkboxesChecked, dataSet)
+    checkList = checkboxesChecked;
+
+    var colTypeCheck = document.getElementById('multicheckbox');
+    for (var i = 0; i < colTypeCheck.length; i++) {
+        if (colTypeCheck[i].selected) {
+            colTypeCheckList.push(colTypeCheck[i].value);
+        }
+    }
+
     csv.forEach((item) => {
         item.Year = parseDate1(item.TimeStamp).getFullYear();
         item.Month = parseDate1(item.TimeStamp).getMonth() + 1;
@@ -134,7 +154,8 @@ d3.csv(path, (error, csv) => {
         .on("filtered",function(chart){
             console.log("after US filter: 0");
             $('#parallelSets').remove();
-            drawFromCSV(checkList, states.top(Infinity))
+            dataSet = states.top(Infinity);
+            drawFromCSV(checkList, dataSet);
         });
 
 
@@ -173,17 +194,14 @@ d3.csv(path, (error, csv) => {
         .on("filtered",function(chart){
             console.log("after state filter: 0");
             $('#parallelSets').remove();
-            drawFromCSV(checkList, counties.top(Infinity))
+            dataSet = counties.top(Infinity);
+            drawFromCSV(checkList, dataSet)
         });
-
-    // var scale = Math.min(960 * 1.2, 500 * 2.1);
 
     dc.renderAll("counties_chart")
     var previous;
 
     stateChart.on('preRender', (chart) => {
-
-
         if (usChart.filters().length == 1) {
             var projection = d3.geo.albersUsa()
                 .scale(scales[usChart.filters()[0]])
@@ -197,10 +215,9 @@ d3.csv(path, (error, csv) => {
         }
         chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
     });
+
     stateChart.on('preRedraw', (chart) => {
-
         if (usChart.filters().length == 1) {
-
             var projection = d3.geo.albersUsa()
                 .scale(scales[usChart.filters()[0]])
                 .translate(translations[usChart.filters()[0]]);
@@ -258,7 +275,9 @@ d3.csv(path, (error, csv) => {
                 .on("filtered",function(chart){
                     console.log("after area filter: 0");
                     $('#parallelSets').remove();
-                    drawFromCSV(checkList, dateDim.top(Infinity))
+                    dataSet = dateDim.top(Infinity);
+                    drawFromCSV(checkList, dataSet)
+                    //drawFromCSV(checkList, dateDim.top(Infinity))
                 });
         } else {
 
@@ -292,7 +311,9 @@ d3.csv(path, (error, csv) => {
                 .on("filtered",function(chart){
                     console.log("after area filter > 0");
                     $('#parallelSets').remove();
-                    drawFromCSV(checkList, dateDim.top(Infinity))
+                    dataSet = dateDim.top(Infinity);
+                    drawFromCSV(checkList, dataSet)
+                    //drawFromCSV(checkList, dateDim.top(Infinity))
                 });
             for (var i = 1; i < selected_states.length; ++i) {
                 stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
@@ -312,8 +333,8 @@ d3.csv(path, (error, csv) => {
     var acc_year_total = accYearDim.group().reduceCount(function (d) {
         return d.Year;
     });
-    testDim = accYearDim.top(Infinity);
-    print_filter("testDim")
+    // testDim = accYearDim.top(Infinity);
+    // print_filter("testDim")
 
     yearRingChart
         .width(260)
@@ -328,7 +349,9 @@ d3.csv(path, (error, csv) => {
     yearRingChart.on("filtered",function(chart){
         console.log("after ring filter");
         $('#parallelSets').remove();
-        drawFromCSV(checkList, accYearDim.top(Infinity))
+        dataSet = accYearDim.top(Infinity);
+        drawFromCSV(checkList, dataSet)
+        //drawFromCSV(checkList, accYearDim.top(Infinity))
     });
     /************
     Stacked Area Chart
@@ -401,7 +424,9 @@ d3.csv(path, (error, csv) => {
     stackedAreaChart.on("filtered",function(chart){
         console.log("after area filter");
         $('#parallelSets').remove();
-        drawFromCSV(checkList, dateDim.top(Infinity))
+        dataSet = dateDim.top(Infinity);
+        drawFromCSV(checkList, dataSet)
+        //drawFromCSV(checkList, dateDim.top(Infinity))
     });
     // for (var i = 2; i < 16; ++i) {
     //     stackedAreaChart.stack(StateSumGroup, 'TX', sel_stack(i));
@@ -426,7 +451,7 @@ d3.csv(path, (error, csv) => {
             top: 10,
             left: 50,
             right: 20,
-            bottom: 20
+            bottom: 50
         })
         .dimension(dateDim)
         .group(month_total)
@@ -555,7 +580,9 @@ d3.csv(path, (error, csv) => {
     heatMapChart.on("filtered",function(chart){
         console.log("after heat filter");
         $('#parallelSets').remove();
-        drawFromCSV(checkList, monthOfTheYearDim.top(Infinity))
+        dataSet = monthOfTheYearDim.top(Infinity);
+        drawFromCSV(checkList, dataSet)
+        //drawFromCSV(checkList, monthOfTheYearDim.top(Infinity))
     });
 
     // $('#dc-heat-map-tot').on('click', function (d) {
@@ -640,3 +667,57 @@ function print_filter(filter) {
     } else {}
     console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
 }
+
+function generateRingChart(divId, attrName){
+        console.log("in generateRingChart");
+        console.log("divId: ",divId);
+        console.log("attrName: ",attrName);
+
+        document.getElementById(divId+'Name').innerHTML = attrName;
+        document.getElementById(divId+'prnt').setAttribute("style","display: block");
+        var attrRingChart = dc.barChart('#'+divId, "map");
+        var attrDim = accident_facts.dimension(function (d) {
+            //console.log(d);
+            return d[attrName];
+        });
+        var attr_total = attrDim.group().reduceCount(function (d) {
+            return d[attrName];
+        });
+
+        // attrRingChart
+        //     .width(300)
+        //     .height(250)
+        //     .externalLabels(25)
+        //     .externalRadiusPadding(30)
+        //     .drawPaths(true)
+        //     .dimension(attrDim)
+        //     .group(attr_total)
+        //     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+
+        attrRingChart
+            .width(350)
+            .height(280)
+            .x(d3.scale.ordinal())
+            .xUnits(dc.units.ordinal)
+            .brushOn(false)
+            .barPadding(0.1)
+            .outerPadding(0.05)
+            .xAxisLabel('Category')
+            .yAxisLabel('Count')
+            .dimension(attrDim)
+            .group(attr_total)
+            .margins({
+                top: 5,
+                left: 70,
+                right: 0,
+                bottom: 30
+            })
+
+        attrRingChart.on("filtered",function(chart){
+            console.log("after ring filter");
+            $('#parallelSets').remove();
+            dataSet = attrDim.top(Infinity);
+            drawFromCSV(checkList, dataSet)
+        });
+        dc.renderAll("map");
+    }

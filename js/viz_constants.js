@@ -3536,3 +3536,30 @@ county_names["0500000US74300"] = "Midway Islands";
 county_names["0500000US74350"] = "Navassa Island";
 county_names["0500000US74400"] = "Palmyra Atoll";
 county_names["0500000US74450"] = "Wake Island";
+
+var SchoolBus={
+  "0":"Not Involved",
+  "1":"Involved",
+  "8":"Unknown"
+};
+var CollisionType={
+  "1":"Front",
+  "2":"Rear",
+  "3":"Angle",
+  "4":"Random"
+};
+var HIT_RUN = {
+  "0":"0",
+  "1":"1",
+  "2":"2",
+  "3":"3",
+  "4":"4",
+  "5":"5"
+};
+var WEATHER={
+  "1":"Moderate",
+  "2":"Rain",
+  "3":"Snow",
+  "4":"Fog",
+  "5":"Winds"
+};

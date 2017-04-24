@@ -57,13 +57,44 @@
                             <option value="HIT_RUN">Hit&Run</option>
                             <option value="DrunkNDrive">Drunk Driver</option></select>
                         </span>
+                        <!--<span>&nbsp;</span><span>&nbsp;</span>
+                        <span>
+                            <strong>Collision Type: </strong>
+                            <span class="dropdown">
+                            <select id="collision" multiple="multiple">
+                                <option value="1" selected>Front</option>
+                                <option value="2" >Rear</option>
+                                <option value="3" selected>Angle</option>
+                                <option value="4" >random</option></select>
+                            </span>
+                        </span>-->
                     <div class='row-fluid col-sm-12'><span>&nbsp;</span></div>
-                    <div id='dc-parallel-graph'></div>
+                    <div>
+                        <div class='row-fluid col-sm-6' id='dc-parallel-graph'></div>
+                        <div class='row-fluid col-sm-3' id='attr1prnt' style="display: none">
+                            <div id='attr1Name'><b>abc</b></div>
+                            <div id='attr1'></div>
+                        </div>
+                        <div class='row-fluid col-sm-3' id='attr2prnt' style="display: none">
+                            <div id='attr2Name'><b>abc</b></div>
+                            <div id='attr2'></div>
+                        </div>
+                        <div class='row-fluid col-sm-3' id='attr3prnt' style="display: none">
+                            <div><span>&nbsp;</span></div>
+                            <div id='attr3Name'><b>abc</b></div>
+                            <div id='attr3'></div>
+                        </div>
+                        <div class='row-fluid col-sm-3' id='attr4prnt' style="display: none">
+                            <div><span>&nbsp;</span></div>
+                            <div id='attr4Name'><b>abc</b></div>
+                            <div id='attr4'></div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
             <div class='col-sm-12' style="border-style: solid; border-width: 1px 5px 1px 5px;">
-                <span style='font-size: 21px; text-align: center;'> &nbsp;&nbsp;</span>
+                <!--<span style='font-size: 21px; text-align: center;'> &nbsp;&nbsp;</span>-->
                 <div class='col-sm-12'>
                     <form id="form1">
                         <input type="radio" id="incidents" value="no" checked>
@@ -92,32 +123,52 @@
     <script src='js/viz_constants.js' type='text/javascript'></script>
     <script src='js/simple_vis.js' type='text/javascript'></script>
     <script type="text/javascript">      
-        $(document).ready(function () {
-            var checkboxes = document.getElementById('multicheckbox');
-            var checkboxesChecked = [];
+        $('#multicheckbox').multiselect();
+        $('#collision').multiselect();
+        $('.dropdown').on('hidden.bs.dropdown', function (event) {
+            checkboxes = document.getElementById('multicheckbox');
+            checkboxesChecked = [];
             for (var i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].selected) {
                     checkboxesChecked.push(checkboxes[i].value);
                 }
             }
-            drawParallelStes(checkboxesChecked, path);
-            checkList = checkboxesChecked;
-            $('#multicheckbox').multiselect();
-            $('#multicheckbox1').multiselect();
-            $('#multicheckbox2').multiselect();
-            $('.dropdown').on('hidden.bs.dropdown', function (event) {
-                checkboxes = document.getElementById('multicheckbox');
-                checkboxesChecked = [];
-                for (var i = 0; i < checkboxes.length; i++) {
-                    if (checkboxes[i].selected) {
-                        checkboxesChecked.push(checkboxes[i].value);
-                    }
-                }
+            if(checkList.toString() !== checkboxesChecked.toString()){
                 $('#parallelSets').remove();
-                drawParallelStes(checkboxesChecked, path);
+                drawFromCSV(checkboxesChecked, dataSet)
                 checkList = checkboxesChecked;
-            });
+            }
+            for (var i = 0; i < checkboxesChecked.length; i++) {
+                generateRingChart('attr' + (i+1).toString(), checkboxesChecked[i])
+            }
 
+            // colTypeCheck = document.getElementById('collision');
+            // newColTypeCheckList = [];
+            // if(colTypeCheck.length == 0){
+            //     {}
+            // }else{
+            //     for (var i = 0; i < colTypeCheck.length; i++) {
+            //         if (colTypeCheck[i].selected) {
+            //             newColTypeCheckList.push(colTypeCheck[i].value);
+            //         }
+            //     }
+            //     if(colTypeCheckList.toString() !== newColTypeCheckList.toString()){
+            //         collisionDim = accident_facts.dimension(function (d) {
+            //             return d.CollisionType;
+            //         });
+            //         console.log(newColTypeCheckList)
+            //         print_filter("collisionDim")
+            //         collisionDim.filter(function(d){
+            //             return d in colTypeCheckList;
+            //         })
+            //         console.log("After filter")
+            //         print_filter("collisionDim")
+            //         $('#parallelSets').remove();
+            //         dataSet = collisionDim.top(Infinity);
+            //         drawFromCSV(checkList, dataSet);
+            //         colTypeCheckList = newColTypeCheckList;
+            //     }
+            // }
         });
     </script>
 </body>

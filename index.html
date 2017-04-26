@@ -137,11 +137,18 @@
                 $('#parallelSets').remove();
                 drawFromCSV(checkboxesChecked, dataSet)
                 checkList = checkboxesChecked;
-            }
-            for (var i = 0; i < checkboxesChecked.length; i++) {
-                generateRingChart('attr' + (i+1).toString(), checkboxesChecked[i])
-            }
+                
 
+                // for (var i = 0; i < 4; i++) {
+                //     $('#attr' + (i+1)).children().remove();
+                //     document.getElementById('#attr' + (i+1)+'prnt').setAttribute("style","display: none");
+                // }
+
+                for (var i = 0; i < checkboxesChecked.length; i++) {
+                    generateRingChart('attr' + (i+1).toString(), checkboxesChecked[i])
+                }
+            }
+            
             // colTypeCheck = document.getElementById('collision');
             // newColTypeCheckList = [];
             // if(colTypeCheck.length == 0){

@@ -77,7 +77,7 @@ function drawParallelStes(dimen, path) {
 function drawFromCSV(dimen, csvFile){
     var chart = d3.parsets()
         .dimensions(dimen)
-        .width(850).height(650);
+        .width(800).height(600);
     var vis = d3.select("#dc-parallel-graph").append("svg").attr("id", "parallelSets")
         .attr("width", chart.width())
         .attr("height", chart.height());
@@ -88,7 +88,6 @@ var parseDate1 = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 var checkList = [];
 var testDim;
 d3.csv(path, (error, csv) => {
-    console.log("loaded!!!!!!!!");
     dataSet = csv;
     var checkboxes = document.getElementById('multicheckbox');
     var checkboxesChecked = [];
@@ -119,6 +118,10 @@ d3.csv(path, (error, csv) => {
     });
 
     accident_facts = crossfilter(csv);
+
+    for (var i = 0; i < checkboxesChecked.length; i++) {
+        generateRingChart('attr' + (i+1).toString(), checkboxesChecked[i])
+    }
 
     states = accident_facts.dimension(function (d) {
         return d.STATE_ABBR;
@@ -684,16 +687,6 @@ function generateRingChart(divId, attrName){
             return d[attrName];
         });
 
-        // attrRingChart
-        //     .width(300)
-        //     .height(250)
-        //     .externalLabels(25)
-        //     .externalRadiusPadding(30)
-        //     .drawPaths(true)
-        //     .dimension(attrDim)
-        //     .group(attr_total)
-        //     .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
-
         attrRingChart
             .width(350)
             .height(280)
@@ -706,6 +699,10 @@ function generateRingChart(divId, attrName){
             .yAxisLabel('Count')
             .dimension(attrDim)
             .group(attr_total)
+            .title(function (d) {
+                return " Value:   " + d.value + "\n" +
+                    " Category:   " + d.key;
+            })
             .margins({
                 top: 5,
                 left: 70,

@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FARS</title>
-    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>-->
     <script src="js/d3.js" type="text/javascript"></script>
     <script src="js/d3.parasets.js" type="text/javascript"></script>
     <script src="js/crossfilter.js" type="text/javascript"></script>
@@ -24,11 +23,7 @@
             stroke-width: 1;
         }
     </style>
-
 </head>
-
-
-
 <body>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -58,17 +53,6 @@
                             <option value="HIT_RUN">Hit&Run</option>
                             <option value="DrunkNDrive">Drunk Driver</option></select>
                         </span>
-                        <!--<span>&nbsp;</span><span>&nbsp;</span>
-                        <span>
-                            <strong>Collision Type: </strong>
-                            <span class="dropdown">
-                            <select id="collision" multiple="multiple">
-                                <option value="1" selected>Front</option>
-                                <option value="2" >Rear</option>
-                                <option value="3" selected>Angle</option>
-                                <option value="4" >random</option></select>
-                            </span>
-                        </span>-->
                         <div class='row-fluid col-sm-12'><span>&nbsp;</span></div>
                         <div>
                             <div class='row-fluid col-sm-6' id='dc-parallel-graph'></div>
@@ -95,7 +79,6 @@
                 </div>
             </div>
             <div class='col-sm-12' style="border-style: solid; border-width: 1px 5px 1px 5px;background-color:#EEEEEE">
-                <!--<span style='font-size: 21px; text-align: center;'> &nbsp;&nbsp;</span>-->
                 <div class="col-sm-5" style="margin-top:20px">
                     <form id="form1">
                         <input type="radio" id="incidents" value="no" checked>
@@ -120,11 +103,9 @@
                     <div class='row-fluid pie-graph col-sm-6' id='dc-sts-pie-graph'></div>
                 </div>
                 <div class='chart-graph col-sm-5' id='dc-heat-map-tot'></div>
-                <!--<div class='chart-graph col-sm-12' id='dc-heat-map-yearly'></div>-->
             </div>
         </div>
     </div>
-    <!--</div>-->
     <script src='js/viz_constants.js' type='text/javascript'></script>
     <script src='js/simple_vis.js' type='text/javascript'></script>
     <script type="text/javascript">
@@ -143,44 +124,17 @@
                 drawFromCSV(checkboxesChecked, dataSet)
                 checkList = checkboxesChecked;
 
-
-                // for (var i = 0; i < 4; i++) {
-                //     $('#attr' + (i+1)).children().remove();
-                //     document.getElementById('#attr' + (i+1)+'prnt').setAttribute("style","display: none");
-                // }
+                for (var i = 0; i < 4; i++) {
+                    if($('#attr' + (i+1)).children().length > 0){
+                        $('#attr' + (i+1)).children().remove();
+                    }
+                    document.getElementById('attr' + (i+1)+'prnt').setAttribute("style","display: none");
+                }
 
                 for (var i = 0; i < checkboxesChecked.length; i++) {
                     generateRingChart('attr' + (i + 1).toString(), checkboxesChecked[i])
                 }
             }
-
-            // colTypeCheck = document.getElementById('collision');
-            // newColTypeCheckList = [];
-            // if(colTypeCheck.length == 0){
-            //     {}
-            // }else{
-            //     for (var i = 0; i < colTypeCheck.length; i++) {
-            //         if (colTypeCheck[i].selected) {
-            //             newColTypeCheckList.push(colTypeCheck[i].value);
-            //         }
-            //     }
-            //     if(colTypeCheckList.toString() !== newColTypeCheckList.toString()){
-            //         collisionDim = accident_facts.dimension(function (d) {
-            //             return d.CollisionType;
-            //         });
-            //         console.log(newColTypeCheckList)
-            //         print_filter("collisionDim")
-            //         collisionDim.filter(function(d){
-            //             return d in colTypeCheckList;
-            //         })
-            //         console.log("After filter")
-            //         print_filter("collisionDim")
-            //         $('#parallelSets').remove();
-            //         dataSet = collisionDim.top(Infinity);
-            //         drawFromCSV(checkList, dataSet);
-            //         colTypeCheckList = newColTypeCheckList;
-            //     }
-            // }
         });
     </script>
 </body>

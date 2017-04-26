@@ -438,7 +438,7 @@ d3.csv(path, (error, csv) => {
     var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
 
     var heatColorMapping = d3.scale.linear()
-        .range(["green", "orange", "red"]);
+        .range(["grey", "orange", "red"]);
 
     heatMapChart
         .width(700)
@@ -460,7 +460,7 @@ d3.csv(path, (error, csv) => {
                 " Fatalities:   " + d.value.FATALS;
         })
         .margins({
-            top: 30,
+            top: 35,
             left: 50,
             right: 20,
             bottom: 15
@@ -522,11 +522,12 @@ function generateRingChart(divId, attrName) {
         .outerPadding(0.05)
         .xAxisLabel('Category')
         .yAxisLabel('Count')
+        .elasticY(true)
         .dimension(attrDim)
         .group(attr_total)
         .title(function (d) {
-            return " Value:   " + d.value + "\n" +
-                " Category:   " + d.key;
+            return " Category: " + window[attrName][d.key] + "\n" +
+                " Value: " + d.value;
         })
         .margins({
             top: 5,

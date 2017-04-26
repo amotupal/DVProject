@@ -136,7 +136,7 @@ d3.csv(path, (error, csv) => {
         .scale(600)
         .translate([250, 150]);
     var usChart = dc.geoChoroplethChart("#dc-map-chart", "map");
-    usChart.width(660)
+    usChart.width(860)
         .height(300)
         .projection(projection)
         .dimension(states)
@@ -152,14 +152,16 @@ d3.csv(path, (error, csv) => {
             return kv.value / population_map[kv.key];
         })
         .title(function (d) {
-            return "State: " + d.key + "\nNumber of accidents: " + numberFormat(d.value ? d.value * population_map[d.key] : 0);
+            return "State: " + name2abbr[d.key] + "\nNumber of accidents per 1000 population: " + numberFormat(d.value ? d.value  : 0);
         })
+        // * population_map[d.key]
         .on("filtered",function(chart){
             console.log("after US filter: 0");
             $('#parallelSets').remove();
             dataSet = states.top(Infinity);
             drawFromCSV(checkList, dataSet);
         });
+        // usChart.legend(dc.legend().x(200).y(150).itemHeight(13).gap(5))
 
 
     // Data preparation of county chart
@@ -206,6 +208,7 @@ d3.csv(path, (error, csv) => {
 
     stateChart.on('preRender', (chart) => {
         if (usChart.filters().length == 1) {
+            document.getElementById("state-chart-label").innerHTML = "County Level Chart for " + name2abbr[usChart.filters()[0]]
             var projection = d3.geo.albersUsa()
                 .scale(scales[usChart.filters()[0]])
                 .translate(translations[usChart.filters()[0]]);
@@ -221,6 +224,7 @@ d3.csv(path, (error, csv) => {
 
     stateChart.on('preRedraw', (chart) => {
         if (usChart.filters().length == 1) {
+            document.getElementById("state-chart-label").innerHTML = "County Level Chart for " + name2abbr[usChart.filters()[0]]
             var projection = d3.geo.albersUsa()
                 .scale(scales[usChart.filters()[0]])
                 .translate(translations[usChart.filters()[0]]);
@@ -230,6 +234,12 @@ d3.csv(path, (error, csv) => {
                     return d.properties.GEO_ID;
                 })
         } else {
+            if (usChart.filters().length == 0){
+                document.getElementById("state-chart-label").innerHTML = "Select a State to view county level map"
+            }
+            else{
+                document.getElementById("state-chart-label").innerHTML = "County Level Chart is only availabel when a single state is selected"
+            }
             document.getElementById('dc-map-counties').style.visibility = "hidden";
                        stateJsons = chart.geoJsons();
             stateJsons.forEach((statejson) => {

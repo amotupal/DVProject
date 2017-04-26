@@ -3563,3 +3563,57 @@ var WEATHER={
   "4":"Fog",
   "5":"Winds"
 };
+
+name2abbr = {};
+
+name2abbr["AL"] = "Alabama";
+name2abbr["AK"] = "Alaska";
+name2abbr["AZ"] = "Arizona";
+name2abbr["AR"] = "Arkansas";
+name2abbr["CA"] = "California";
+name2abbr["CO"] = "Colorado";
+name2abbr["CT"] = "Connecticut";
+name2abbr["DE"] = "Delaware";
+name2abbr["FL"] = "Florida";
+name2abbr["GA"] = "Georgia";
+name2abbr["HI"] = "Hawaii";
+name2abbr["ID"] = "Idaho";
+name2abbr["IL"] = "Illinois";
+name2abbr["IN"] = "Indiana";
+name2abbr["IA"] = "Iowa";
+name2abbr["KS"] = "Kansas";
+name2abbr["KY"] = "Kentucky";
+name2abbr["LA"] = "Louisiana";
+name2abbr["ME"] = "Maine";
+name2abbr["MD"] = "Maryland";
+name2abbr["MA"] = "Massachusetts";
+name2abbr["MI"] = "Michigan";
+name2abbr["MN"] = "Minnesota";
+name2abbr["MS"] = "Mississippi";
+name2abbr["MO"] = "Missouri";
+name2abbr["MT"] = "Montana";
+name2abbr["NE"] = "Nebraska";
+name2abbr["NV"] = "Nevada";
+name2abbr["NH"] = "New Hampshire";
+name2abbr["NJ"] = "New Jersey";
+name2abbr["NM"] = "New Mexico";
+name2abbr["NY"] = "New York";
+name2abbr["NC"] = "North Carolina";
+name2abbr["ND"] = "North Dakota";
+name2abbr["OH"] = "Ohio";
+name2abbr["OK"] = "Oklahoma";
+name2abbr["OR"] = "Oregon";
+name2abbr["PA"] = "Pennsylvania";
+name2abbr["RI"] = "Rhode Island";
+name2abbr["SC"] = "South Carolina";
+name2abbr["SD"] = "South Dakota";
+name2abbr["TN"] = "Tennessee";
+name2abbr["TX"] = "Texas";
+name2abbr["UT"] = "Utah";
+name2abbr["VT"] = "Vermont";
+name2abbr["VA"] = "Virginia";
+name2abbr["WA"] = "Washington";
+name2abbr["WV"] = "West Virginia";
+name2abbr["WI"] = "Wisconsin";
+name2abbr["WY"] = "Wyoming";
+

@@ -21,10 +21,9 @@
 </head>
 <style>
     path {
-     stroke: #ffffff;
-     stroke-width: 1;
-  }
-
+        stroke: #EEEEEE;
+        stroke-width: 1;
+    }
 </style>
 
 
@@ -68,61 +67,65 @@
                                 <option value="4" >random</option></select>
                             </span>
                         </span>-->
-                    <div class='row-fluid col-sm-12'><span>&nbsp;</span></div>
-                    <div>
-                        <div class='row-fluid col-sm-6' id='dc-parallel-graph'></div>
-                        <div class='row-fluid col-sm-3' id='attr1prnt' style="display: none">
-                            <div id='attr1Name'><b>abc</b></div>
-                            <div id='attr1'></div>
+                        <div class='row-fluid col-sm-12'><span>&nbsp;</span></div>
+                        <div>
+                            <div class='row-fluid col-sm-6' id='dc-parallel-graph'></div>
+                            <div class='row-fluid col-sm-3' id='attr1prnt' style="display: none">
+                                <div id='attr1Name'><b>abc</b></div>
+                                <div id='attr1'></div>
+                            </div>
+                            <div class='row-fluid col-sm-3' id='attr2prnt' style="display: none">
+                                <div id='attr2Name'><b>abc</b></div>
+                                <div id='attr2'></div>
+                            </div>
+                            <div class='row-fluid col-sm-3' id='attr3prnt' style="display: none">
+                                <div><span>&nbsp;</span></div>
+                                <div id='attr3Name'><b>abc</b></div>
+                                <div id='attr3'></div>
+                            </div>
+                            <div class='row-fluid col-sm-3' id='attr4prnt' style="display: none">
+                                <div><span>&nbsp;</span></div>
+                                <div id='attr4Name'><b>abc</b></div>
+                                <div id='attr4'></div>
+                            </div>
                         </div>
-                        <div class='row-fluid col-sm-3' id='attr2prnt' style="display: none">
-                            <div id='attr2Name'><b>abc</b></div>
-                            <div id='attr2'></div>
-                        </div>
-                        <div class='row-fluid col-sm-3' id='attr3prnt' style="display: none">
-                            <div><span>&nbsp;</span></div>
-                            <div id='attr3Name'><b>abc</b></div>
-                            <div id='attr3'></div>
-                        </div>
-                        <div class='row-fluid col-sm-3' id='attr4prnt' style="display: none">
-                            <div><span>&nbsp;</span></div>
-                            <div id='attr4Name'><b>abc</b></div>
-                            <div id='attr4'></div>
-                        </div>
-                    </div>
                     </div>
                 </div>
             </div>
-            <div class='col-sm-12' style="border-style: solid; border-width: 1px 5px 1px 5px;">
+            <div class='col-sm-12' style="border-style: solid; border-width: 1px 5px 1px 5px;background-color:#EEEEEE">
                 <!--<span style='font-size: 21px; text-align: center;'> &nbsp;&nbsp;</span>-->
-                <div class='col-sm-12'>
+                <div class="col-sm-5" style="margin-top:20px">
                     <form id="form1">
                         <input type="radio" id="incidents" value="no" checked>
                         <label for="incidents">Incidents</label>
-                        <input type="radio" id="fatalities" value="yes" >
+                        <input type="radio" id="fatalities" value="yes">
                         <label for="fatalities">Fatalities</label>
                     </form>
                     <div class='' id='dc-map-chart' style="float:left"></div>
+                </div>
+                <div class="col-sm-5" style="margin-top:20px">
+                    <label id="state-chart-label">Select a State to view county level map </label>
+                    <div class='' id='dc-map-counties-alt-text' style="float:left"></div>
                     <div class='' id='dc-map-counties' style="float:left"></div>
                 </div>
             </div>
             <div class="col-sm-12" style="border-style: solid; border-width: 1px 5px 2px 5px;">
-            <div class='chart-graph col-sm-5' id='dc-line-graph'></div>
-            <div class='chart-graph col-sm-2'>
-                <div>&nbsp;</div>
-                <div>&nbsp;</div>
-                <div class='row-fluid pie-graph col-sm-12' id='dc-yr-pie-graph'></div>
-                <div class='row-fluid pie-graph col-sm-6' id='dc-sts-pie-graph'></div>
-            </div>
-            <div class='chart-graph col-sm-5' id='dc-heat-map-tot'></div>
-            <!--<div class='chart-graph col-sm-12' id='dc-heat-map-yearly'></div>-->
-            </div>
+                <div class='chart-graph col-sm-5' id='dc-line-graph'></div>
+                <div class='chart-graph col-sm-2'>
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    <div class='row-fluid pie-graph col-sm-12' id='dc-yr-pie-graph'></div>
+                    <div class='row-fluid pie-graph col-sm-6' id='dc-sts-pie-graph'></div>
+                </div>
+                <div class='chart-graph col-sm-5' id='dc-heat-map-tot'></div>
+                <!--<div class='chart-graph col-sm-12' id='dc-heat-map-yearly'></div>-->
             </div>
         </div>
     </div>
+    </div>
     <script src='js/viz_constants.js' type='text/javascript'></script>
     <script src='js/simple_vis.js' type='text/javascript'></script>
-    <script type="text/javascript">      
+    <script type="text/javascript">
         $('#multicheckbox').multiselect();
         $('#collision').multiselect();
         $('.dropdown').on('hidden.bs.dropdown', function (event) {
@@ -133,7 +136,7 @@
                     checkboxesChecked.push(checkboxes[i].value);
                 }
             }
-            if(checkList.toString() !== checkboxesChecked.toString()){
+            if (checkList.toString() !== checkboxesChecked.toString()) {
                 $('#parallelSets').remove();
                 drawFromCSV(checkboxesChecked, dataSet)
                 checkList = checkboxesChecked;

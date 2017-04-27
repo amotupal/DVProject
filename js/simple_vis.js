@@ -24,7 +24,7 @@ $('#form1 input').on('change', function () {
 
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 var geo_color_scheme = ['#fef0d9', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#990000']
-var heatmap_colors = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026'];
+var heatmap_colors = ['#ffffcc','#ffeda0','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#bd0026','#800026']
 var yearBarChartColors = ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a']
 
 
@@ -410,8 +410,6 @@ d3.csv(path, (error, csv) => {
 
     var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
 
-    var heatColorMapping = d3.scale.linear()
-        .range(["grey", "orange", "red"]);
 
     heatMapChart
         .width(700)
@@ -440,15 +438,15 @@ d3.csv(path, (error, csv) => {
         })
         .colors(heatmap_colors)
         .calculateColorDomain();
-
+    heatMapChart.xBorderRadius(0);
+    heatMapChart.yBorderRadius(0);
     heatMapChart.on('preRender', (chart) => {
         chart.calculateColorDomain();
     });
     heatMapChart.on('preRedraw', (chart) => {
         chart.calculateColorDomain();
     });
-    heatMapChart.xBorderRadius(1);
-    heatMapChart.yBorderRadius(1);
+
 
     heatMapChart.on("filtered", function (chart) {
         $('#parallelSets').remove();

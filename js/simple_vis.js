@@ -1,4 +1,5 @@
 var usCounties;
+var incfat = "fatalities";
 
 function readGeoJSon(state_name, cb) {
     d3.json(full_states[state_name], function (_countyJson) {
@@ -11,17 +12,28 @@ for (propertyName in full_states) {
         countyJson[_name] = _countyJson;
     })
 }
+$('#form1 input').on('change', function () {
+    var newincfat = $('input[name=choro]:checked', '#form1').val();
+    if (newincfat != incfat) {
+        incfat = newincfat;
+        dc.renderAll("map")
+    }
+
+});
 
 
 var color_sheme = ["#E2F2FF", "#C4E4FF", "#9ED2FF", "#81C5FF", "#6BBAFF", "#51AEFF", "#36A2FF", "#1E96FF", "#0089FF", "#0061B5"];
 var geo_color_scheme = ['#fef0d9', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#990000']
 var heatmap_colors = ['#006837', '#1a9850', '#66bd63', '#a6d96a', '#d9ef8b', '#ffffbf', '#fee08b', '#fdae61', '#f46d43', '#d73027', '#a50026'];
+var yearBarChartColors = ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a']
+
 
 var county_colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#e34a33', '#b30000'];
 var parseDate = d3.time.format("%m/%d/%Y").parse;
 var numberFormat = d3.format('.2f');
 var states;
 var stateRaisedCount;
+var stateRaisedFatalities;
 var accident_facts;
 var population_map = {};
 var county_population_map = {};
@@ -113,6 +125,7 @@ d3.csv(path, (error, csv) => {
 
     accident_facts = crossfilter(csv);
 
+
     for (var i = 0; i < checkboxesChecked.length; i++) {
         generateRingChart('attr' + (i + 1).toString(), checkboxesChecked[i])
     }
@@ -122,10 +135,11 @@ d3.csv(path, (error, csv) => {
     });
     stateGroup = states.group();
     stateRaisedCount = stateGroup.reduceCount();
+    stateRaisedFatalities = stateGroup.reduceSum(function (d) {
+        return d.FATALS;
+    });
 
-    // stateRaisedFatalities = stateGroup.reduceSum(function (d) {
-    //     return d.FATALS;
-    // });
+
     var projection = d3.geo.albersUsa()
         .scale(600)
         .translate([250, 150]);
@@ -134,7 +148,7 @@ d3.csv(path, (error, csv) => {
         .height(300)
         .projection(projection)
         .dimension(states)
-        .group(stateRaisedCount)
+        .group(stateRaisedFatalities)
         .colors(geo_color_scheme)
         .colorAccessor(function (d) {
             return d;
@@ -146,7 +160,7 @@ d3.csv(path, (error, csv) => {
             return kv.value / population_map[kv.key];
         })
         .title(function (d) {
-            return "State: " + name2abbr[d.key] + "\nNumber of accidents per 1000 population: " + numberFormat(d.value * population_map[d.key] ? d.value : 0);
+            return "State: " + name2abbr[d.key] + "\nNumber of accidents per 1000 population: " + numberFormat(d.value ? d.value : 0);
         })
         // 
         .on("filtered", function (chart) {
@@ -154,8 +168,6 @@ d3.csv(path, (error, csv) => {
             dataSet = states.top(Infinity);
             drawFromCSV(checkList, dataSet);
         });
-    // usChart.legend(dc.legend().x(200).y(150).itemHeight(13).gap(5))
-
 
     // Data preparation of county chart
     counties = accident_facts.dimension(function (d) {
@@ -163,10 +175,9 @@ d3.csv(path, (error, csv) => {
     });
     countyGroup = counties.group();
     countyRaisedCount = countyGroup.reduceCount();
-
-    // countyRaisedFatalities = countyGroup.reduceSum(function (d) {
-    //     return d.FATALS;
-    // });
+    countyRaisedFatalities = countyGroup.reduceSum(function (d) {
+        return d.FATALS;
+    });
 
     var stateChart;
     stateChart = dc.geoChoroplethChart("#dc-map-counties", "map");
@@ -237,7 +248,7 @@ d3.csv(path, (error, csv) => {
             });
         }
         chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
-    })
+    });
     usChart.on('preRender', (chart) => {
         chart.colorDomain(d3.extent(chart.data(), chart.valueAccessor()));
     });
@@ -249,29 +260,32 @@ d3.csv(path, (error, csv) => {
     /************
     Year Ring
     *************/
-    var yearRingChart = dc.pieChart("#dc-yr-pie-graph", "map");
+    var yearSelection = dc.barChart("#dc-yr-pie-graph", "map");
     var accYearDim = accident_facts.dimension(function (d) {
         return +d.Year;
     });
-    var acc_year_total = accYearDim.group().reduceCount(function (d) {
-        return d.Year;
-    });
-    yearRingChart
-        .width(260)
-        .height(220)
-        .externalLabels(25)
-        .externalRadiusPadding(30)
-        .drawPaths(true)
+    var colors = d3.scale.ordinal().domain([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015])
+        .range(yearBarChartColors)
+    var acc_year_total = accYearDim.group().reduceCount();
+    print_filter(acc_year_total)
+    yearSelection
+        .width(730)
+        .height(70)
+        .barPadding(0.1)
+        .outerPadding(0.05)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .brushOn(false)
+        .elasticY(true)
         .dimension(accYearDim)
         .group(acc_year_total)
-        .ordinalColors(["#78CC00", "#7B71C5", "#56B2EA", "#E064CD", "#F8B700"]);
+        .colorAccessor(function (d) {
+            console.log(d)
+            return colors(d.key);
+        })
 
-    yearRingChart.on("filtered", function (chart) {
-        $('#parallelSets').remove();
-        dataSet = accYearDim.top(Infinity);
-        drawFromCSV(checkList, dataSet)
-        //drawFromCSV(checkList, accYearDim.top(Infinity))
-    });
+    yearSelection.yAxis().ticks(0);
+
     /************
     Stacked Area Chart
     *************/
@@ -303,14 +317,13 @@ d3.csv(path, (error, csv) => {
 
     function sel_stack(i) {
         return function (d) {
-            if(i=='US'){
-                return all_incidents[d.key-2006].value
-            }
-            else{
+            if (i == 'US') {
+                return all_incidents[d.key - 2006].value
+            } else {
 
                 return (d.value[i] || 0);
             }
-            
+
         };
     }
     stackedAreaChart
@@ -335,12 +348,12 @@ d3.csv(path, (error, csv) => {
         });
 
     stackedAreaChart.xAxis().ticks(11);
-     stackedAreaChart.on("preRender", function (chart) {
+    stackedAreaChart.on("preRender", function (chart) {
         var selected_states = usChart.filters()
         if (selected_states.length == 0) {
             chart
                 .dimension(dateDim)
-                .group(incidents, 'US',sel_stack('US'))
+                .group(incidents, 'US', sel_stack('US'))
                 .x(d3.scale.linear().domain([1, 18]))
                 .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
                 .title(function (d) {
@@ -359,52 +372,12 @@ d3.csv(path, (error, csv) => {
                 stackedAreaChart.stack(StateSumGroup, selected_states[i], sel_stack(selected_states[i]));
             }
         }
-     })
+    });
     stackedAreaChart.on("filtered", function (chart) {
         $('#parallelSets').remove();
         dataSet = dateDim.top(Infinity);
         drawFromCSV(checkList, dataSet)
     });
-
-
-    var hits = dateDim.group().reduceSum(function (d) {
-        return d.FATALS;
-    });
-
-    var volumeChart = dc.barChart("#dc-line-chart", "map");
-    var month_total = dateDim.group().reduceCount();
-
-
-    volumeChart
-        .width(500).height(80)
-        .margins({
-            top: 10,
-            left: 50,
-            right: 20,
-            bottom: 50
-        })
-        .dimension(dateDim)
-        .group(month_total)
-        .gap(2)
-        .x(d3.time.scale())
-        .round(d3.time.months)
-        .xUnits(d3.time.months)
-        .elasticX(true);
-
-    volumeChart.xAxis().ticks(0);
-
-    function getvalues(d) {
-        var str = d.key.getDate() + "/" + (d.key.getMonth() + 1) + "/" + d.key.getFullYear() + "\n";
-        var key_filter = dateDim.filter(d.key).top(Infinity);
-        var total = 0
-        key_filter.forEach(function (a) {
-            str += a.status + ": " + a.FATALS + " Hit(s)\n";
-            total += a.FATALS;
-        });
-        str += "Total:" + total;
-        dateDim.filterAll();
-        return str;
-    }
 
 
     var monthOfTheYearDim = accident_facts.dimension(function (d) {
@@ -473,7 +446,7 @@ d3.csv(path, (error, csv) => {
     });
     heatMapChart.on('preRedraw', (chart) => {
         chart.calculateColorDomain();
-    })
+    });
     heatMapChart.xBorderRadius(1);
     heatMapChart.yBorderRadius(1);
 
@@ -541,5 +514,4 @@ function generateRingChart(divId, attrName) {
         dataSet = attrDim.top(Infinity);
         drawFromCSV(checkList, dataSet)
     });
-    dc.renderAll("map");
 }

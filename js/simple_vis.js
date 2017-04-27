@@ -239,7 +239,7 @@ d3.csv(path, (error, csv) => {
             if (usChart.filters().length == 0) {
                 document.getElementById("state-chart-label").innerHTML = "Select a State to view county level map"
             } else {
-                document.getElementById("state-chart-label").innerHTML = "County Level Chart is only availabel when a single state is selected"
+                document.getElementById("state-chart-label").innerHTML = "County Level Chart is only available for a single state"
             }
             document.getElementById('dc-map-counties').style.visibility = "hidden";
             stateJsons = chart.geoJsons();
@@ -267,7 +267,6 @@ d3.csv(path, (error, csv) => {
     var colors = d3.scale.ordinal().domain([2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015])
         .range(yearBarChartColors)
     var acc_year_total = accYearDim.group().reduceCount();
-    print_filter(acc_year_total)
     yearSelection
         .width(730)
         .height(70)
@@ -280,7 +279,6 @@ d3.csv(path, (error, csv) => {
         .dimension(accYearDim)
         .group(acc_year_total)
         .colorAccessor(function (d) {
-            console.log(d)
             return colors(d.key);
         })
 

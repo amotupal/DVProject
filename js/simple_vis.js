@@ -62,7 +62,7 @@ d3.csv(github_path, (error, pops) => {
         });
     }
 });
-
+var int2Yr = ["","January","February","March","April","May","June","July","August","September","October","November","December"]
 var geoJson;
 d3.json("Data/us_states.json", function (statesJson) {
     geoJson = statesJson;
@@ -83,7 +83,7 @@ function drawParallelStes(dimen, path) {
 function drawFromCSV(dimen, csvFile) {
     var chart = d3.parsets()
         .dimensions(dimen)
-        .width(800).height(600);
+        .width(800).height(640);
     var vis = d3.select("#dc-parallel-graph").append("svg").attr("id", "parallelSets")
         .attr("width", chart.width())
         .attr("height", chart.height());
@@ -116,6 +116,7 @@ d3.csv(path, (error, csv) => {
         item.Year = parseDate1(item.TimeStamp).getFullYear();
         item.Month = parseDate1(item.TimeStamp).getMonth() + 1;
         item.Day = parseDate1(item.TimeStamp).getDay() + 1;
+        item.FullMonth = int2Yr[parseDate1(item.TimeStamp).getMonth() + 1];
         var tempDate = new Date(item.TimeStamp);
         item.TimeStamp = tempDate;
         item.FATALS = +item.FATALS;
@@ -150,6 +151,7 @@ d3.csv(path, (error, csv) => {
         .dimension(states)
         .group(stateRaisedFatalities)
         .colors(geo_color_scheme)
+        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
         .colorAccessor(function (d) {
             return d;
         })
@@ -383,7 +385,7 @@ d3.csv(path, (error, csv) => {
 
 
     var monthOfTheYearDim = accident_facts.dimension(function (d) {
-        return [+d.Month, +d.Year];
+        return [d.FullMonth, +d.Year, +d.Month];
     });
 
     var statsByMonthOfYearGroup = monthOfTheYearDim.group().reduce(heatMapAdd, heatMapDel, heatMapInit);
@@ -391,14 +393,14 @@ d3.csv(path, (error, csv) => {
     function heatMapAdd(p, v) {
         p.FATALS += v.FATALS;
         p.PERSONS += v.PERSONS;
-        p.HIT_RUN += v.HIT_RUN;
+        p.CollisionType += v.CollisionType;
         return p;
     }
     /* callback for when data is removed from the current filter results */
     function heatMapDel(p, v) {
         p.FATALS -= v.FATALS;
         p.PERSONS -= v.PERSONS;
-        p.HIT_RUN -= v.HIT_RUN;
+        p.CollisionType -= v.CollisionType;
         return p;
     }
     /* initialize p */
@@ -406,20 +408,19 @@ d3.csv(path, (error, csv) => {
         return {
             FATALS: 0,
             PERSONS: 0,
-            HIT_RUN: 0
+            CollisionType: 0
         };
     }
 
     var heatMapChart = dc.heatMap("#dc-heat-map-tot", "map");
-
-
+    
     heatMapChart
         .width(700)
-        .height(250)
+        .height(260)
         .dimension(monthOfTheYearDim)
         .group(statsByMonthOfYearGroup)
         .keyAccessor(function (d) {
-            return +d.key[0];
+            return +d.key[2];
         })
         .valueAccessor(function (d) {
             return +d.key[1];
@@ -428,12 +429,12 @@ d3.csv(path, (error, csv) => {
             return +d.value.FATALS;
         })
         .title(function (d) {
-            return " Month:   " + d.key[0] + "\n" +
-                " Year:   " + d.key[1] + "\n" +
-                " Fatalities:   " + d.value.FATALS;
+            return  "     Month: " + d.key[0] + "\n" +
+                    "        Year: " + d.key[1] + "\n" +
+                    " Fatalities: " + d.value.FATALS;
         })
         .margins({
-            top: 35,
+            top: 50,
             left: 50,
             right: 20,
             bottom: 15
@@ -474,8 +475,8 @@ function print_filter(filter) {
 }
 
 function generateRingChart(divId, attrName) {
-
-    document.getElementById(divId + 'Name').innerHTML = attrName;
+    console.log("in here: ",divId, attrName)
+    document.getElementById(divId + 'Name').innerHTML = '<h4>'+attrName+'</h4>';
     document.getElementById(divId + 'prnt').setAttribute("style", "display: block");
     var attrRingChart = dc.barChart('#' + divId, "map");
     var attrDim = accident_facts.dimension(function (d) {
@@ -498,6 +499,7 @@ function generateRingChart(divId, attrName) {
         .elasticY(true)
         .dimension(attrDim)
         .group(attr_total)
+        
         .title(function (d) {
             return " Category: " + window[attrName][d.key] + "\n" +
                 " Value: " + d.value;
@@ -514,4 +516,5 @@ function generateRingChart(divId, attrName) {
         dataSet = attrDim.top(Infinity);
         drawFromCSV(checkList, dataSet)
     });
+    dc.renderAll("map")
 }

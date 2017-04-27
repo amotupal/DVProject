@@ -281,7 +281,11 @@ d3.csv(path, (error, csv) => {
         .colorAccessor(function (d) {
             return colors(d.key);
         })
-
+    yearSelection.on("filtered", function (chart) {
+        $('#parallelSets').remove();
+        dataSet = dateDim.top(Infinity);
+        drawFromCSV(checkList, dataSet)
+    });
     yearSelection.yAxis().ticks(0);
 
     /************
